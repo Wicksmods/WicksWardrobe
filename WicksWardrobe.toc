@@ -1,0 +1,12 @@
+## Interface: 20505
+## Title: Wick's Wardrobe
+## Notes: tier set and weapon browser with inline model preview for tbc classic
+## Author: Wick
+## Version: 0.1.0
+## SavedVariables: WicksWardrobeDB
+
+# Core
+Core.lua
+Data.lua
+UI.lua
+Minimap.lua
