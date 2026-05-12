@@ -2,7 +2,7 @@
 ## Title: Wick's Wardrobe
 ## Notes: tier set and weapon browser with inline model preview for tbc classic
 ## Author: Wick
-## Version: 0.1.2
+## Version: 0.2.0
 ## SavedVariables: WicksWardrobeDB
 
 # Core
