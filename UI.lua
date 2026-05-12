@@ -372,9 +372,13 @@ local function buildPanel()
     itemLabel:SetPoint("TOPLEFT", bodyFrame, "TOPLEFT", SIDE_W + 8, -6)
     itemLabel:SetText("ITEMS")
 
-    -- "Preview All" button at the bottom of item column
+    -- Bottom button row: "Preview Set" (left) + "From BIS" (right)
+    local BTN_H   = 20
+    local BTN_PAD = 4
+    local BTN_W   = math.floor((ITEM_W - 12 - BTN_PAD) / 2)
+
     local previewAllBtn = CreateFrame("Button", nil, bodyFrame)
-    previewAllBtn:SetSize(ITEM_W - 12, 20)
+    previewAllBtn:SetSize(BTN_W, BTN_H)
     previewAllBtn:SetPoint("BOTTOMLEFT", bodyFrame, "BOTTOMLEFT", SIDE_W + 6, 4)
     local pabg = UI:NewTexture(previewAllBtn, "BACKGROUND", UI.C_HEADER_BG)
     pabg:SetAllPoints()
@@ -389,7 +393,177 @@ local function buildPanel()
         paLbl:SetTextColor(UI.C_TEXT_NORMAL[1], UI.C_TEXT_NORMAL[2], UI.C_TEXT_NORMAL[3], 1)
     end)
 
-    local ITEM_LIST_BOT_PAD = 30  -- space for Preview All button
+    -- "From BIS" button — imports BIS Tracker custom list or BIS phase
+    local bisBtn = CreateFrame("Button", nil, bodyFrame)
+    bisBtn:SetSize(BTN_W, BTN_H)
+    bisBtn:SetPoint("BOTTOMLEFT", previewAllBtn, "BOTTOMRIGHT", BTN_PAD, 0)
+    local bisbg = UI:NewTexture(bisBtn, "BACKGROUND", UI.C_HEADER_BG)
+    bisbg:SetAllPoints()
+    UI:AddBorder(bisBtn)
+    local bisLbl = UI:NewText(bisBtn, 10, UI.C_TEXT_NORMAL)
+    bisLbl:SetPoint("CENTER")
+    bisLbl:SetText("From BIS")
+    bisBtn:SetScript("OnEnter", function()
+        bisLbl:SetTextColor(UI.C_GREEN[1], UI.C_GREEN[2], UI.C_GREEN[3], 1)
+    end)
+    bisBtn:SetScript("OnLeave", function()
+        bisLbl:SetTextColor(UI.C_TEXT_NORMAL[1], UI.C_TEXT_NORMAL[2], UI.C_TEXT_NORMAL[3], 1)
+    end)
+
+    -- BIS import popup (built once, reused)
+    local bisPopup = CreateFrame("Frame", "WicksWardrobeBISPopup", UIParent)
+    bisPopup:SetFrameStrata("DIALOG")
+    bisPopup:SetWidth(180)
+    bisPopup:Hide()
+    local bisPopupBg = UI:NewTexture(bisPopup, "BACKGROUND", UI.C_BG)
+    bisPopupBg:SetAllPoints()
+    UI:AddBorder(bisPopup)
+    UI:AddCornerAccents(bisPopup, 6, 1)
+
+    local bisPopupTitle = UI:NewText(bisPopup, 9, UI.C_TEXT_DIM)
+    bisPopupTitle:SetPoint("TOPLEFT", bisPopup, "TOPLEFT", 6, -4)
+    bisPopupTitle:SetText("BIS TRACKER SETS")
+
+    -- Slot key → model slot ID mapping (matches BIS Tracker CUSTOM_SLOTS)
+    local BIS_SLOT_MAP = {
+        Head      = 1,  Neck     = 2,  Shoulder = 3,  Back     = 15,
+        Chest     = 5,  Wrist    = 9,  Hands    = 10, Waist    = 6,
+        Legs      = 7,  Feet     = 8,
+        MainHand  = 16, OffHand  = 17, Relic    = 18,
+    }
+
+    local function previewBISItems(slotTable)
+        -- slotTable: { slotKey = { itemId = N } } or { slotKey = { items = { {itemId} } } }
+        if not model then return end
+        model:Undress()
+        for slotKey, entry in pairs(slotTable) do
+            local itemId
+            if type(entry) == "table" then
+                if entry.itemId then
+                    itemId = entry.itemId
+                elseif type(entry[1]) == "table" and entry[1].itemId then
+                    itemId = entry[1].itemId  -- BIS list: first (best) item
+                end
+            end
+            if itemId then
+                local slotId = BIS_SLOT_MAP[slotKey]
+                if slotId then model:SetItem(slotId, itemId) end
+            end
+        end
+    end
+
+    local bisPopupRows = {}
+    local function buildBISPopup(cls, spec)
+        -- Clear old rows
+        for _, r in ipairs(bisPopupRows) do r:Hide() end
+        wipe(bisPopupRows)
+
+        local entries = {}
+
+        -- Custom lists from BIS Tracker
+        if WTBTCustomLists and WTBTCustomLists[cls] and WTBTCustomLists[cls][spec] then
+            for name, slotData in pairs(WTBTCustomLists[cls][spec]) do
+                table.insert(entries, { label = name, data = slotData })
+            end
+        end
+
+        -- BIS phase sets from WTBT_Data
+        if WTBT_Data and WTBT_Data[cls] and WTBT_Data[cls][spec] then
+            local phases = {}
+            for phaseName in pairs(WTBT_Data[cls][spec]) do
+                table.insert(phases, phaseName)
+            end
+            table.sort(phases)
+            for _, phaseName in ipairs(phases) do
+                table.insert(entries, {
+                    label = "BIS: " .. phaseName,
+                    data  = WTBT_Data[cls][spec][phaseName],
+                    isBIS = true,
+                })
+            end
+        end
+
+        if #entries == 0 then
+            table.insert(entries, { label = "(no BIS data)", data = nil })
+        end
+
+        local rowH  = 18
+        local yOff  = -16
+        for _, entry in ipairs(entries) do
+            local row = CreateFrame("Button", nil, bisPopup)
+            row:SetSize(168, rowH)
+            row:SetPoint("TOPLEFT", bisPopup, "TOPLEFT", 6, yOff)
+            yOff = yOff - rowH - 2
+
+            local lbl = UI:NewText(row, 10, UI.C_TEXT_NORMAL)
+            lbl:SetPoint("LEFT", row, "LEFT", 4, 0)
+            lbl:SetText(entry.label)
+
+            if entry.data then
+                row:SetScript("OnClick", function()
+                    if entry.isBIS then
+                        -- BIS data: { slotKey = { {itemId, ...}, ... } }
+                        local flat = {}
+                        for slotKey, items in pairs(entry.data) do
+                            if type(items) == "table" and items[1] then
+                                flat[slotKey] = { itemId = items[1].itemId }
+                            end
+                        end
+                        previewBISItems(flat)
+                    else
+                        previewBISItems(entry.data)
+                    end
+                    bisPopup:Hide()
+                end)
+                row:SetScript("OnEnter", function()
+                    lbl:SetTextColor(UI.C_GREEN[1], UI.C_GREEN[2], UI.C_GREEN[3], 1)
+                end)
+                row:SetScript("OnLeave", function()
+                    lbl:SetTextColor(UI.C_TEXT_NORMAL[1], UI.C_TEXT_NORMAL[2], UI.C_TEXT_NORMAL[3], 1)
+                end)
+            else
+                lbl:SetTextColor(UI.C_TEXT_DIM[1], UI.C_TEXT_DIM[2], UI.C_TEXT_DIM[3], 1)
+            end
+            table.insert(bisPopupRows, row)
+        end
+
+        local totalH = -yOff + 4
+        bisPopup:SetHeight(totalH)
+    end
+
+    bisBtn:SetScript("OnClick", function()
+        if bisPopup:IsShown() then
+            bisPopup:Hide()
+            return
+        end
+        -- Derive class/spec from BIS Tracker state if loaded, else current wardrobe class
+        -- BIS Tracker stores class in title-case ("Priest"), Wardrobe uses uppercase ("PRIEST")
+        local cls  = (WTBT and WTBT.state and WTBT.state.class)
+                     or (selectedClass and selectedClass:sub(1,1):upper() .. selectedClass:sub(2):lower())
+                     or "Priest"
+        local spec = (WTBT and WTBT.state and WTBT.state.spec) or "Holy"
+        buildBISPopup(cls, spec)
+        bisPopup:ClearAllPoints()
+        bisPopup:SetPoint("BOTTOMLEFT", bisBtn, "TOPLEFT", 0, 2)
+        bisPopup:Show()
+    end)
+
+    -- Close popup when clicking elsewhere (click-catcher backdrop)
+    local bisCatcher = CreateFrame("Frame", nil, UIParent)
+    bisCatcher:SetAllPoints(UIParent)
+    bisCatcher:SetFrameStrata("DIALOG")
+    bisCatcher:EnableMouse(true)
+    bisCatcher:Hide()
+    bisCatcher:SetScript("OnMouseDown", function()
+        bisPopup:Hide()
+        bisCatcher:Hide()
+    end)
+    bisPopup:HookScript("OnShow", function() bisCatcher:Show() end)
+    bisPopup:HookScript("OnHide", function() bisCatcher:Hide() end)
+    -- Put the popup above the catcher
+    bisPopup:SetFrameLevel(bisCatcher:GetFrameLevel() + 1)
+
+    local ITEM_LIST_BOT_PAD = 30  -- space for button row
     local itemListH = bodyH - 20 - ITEM_LIST_BOT_PAD
     local itemScrollContent = MakeScrollList(bodyFrame, ITEM_W - 4, itemListH, 20)
     itemScrollContent.clip:SetPoint("TOPLEFT", bodyFrame, "TOPLEFT", SIDE_W + 2, -18)
