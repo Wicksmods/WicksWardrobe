@@ -397,9 +397,23 @@ local function buildPanel()
     local itemRows = {}
     local model    = nil   -- forward ref
 
-    local function tryOnItem(link)
-        if model then
-            model:TryOn(link)
+    -- Inventory slot numbers for DressUpModel:SetItem(slotId, itemId)
+    -- SetItem bypasses class/equip restrictions — visual only.
+    local SLOT_ID = {
+        Head    = 1,  Neck      = 2,  Shoulder = 3,  Back   = 15,
+        Chest   = 5,  Shirt     = 4,  Tabard   = 19, Wrist  = 9,
+        Hands   = 10, Waist     = 6,  Legs     = 7,  Feet   = 8,
+        ["Main Hand"] = 16, ["Off Hand"] = 17, Ranged = 18,
+    }
+
+    local function tryOnItem(item)
+        if not model then return end
+        local slotId = SLOT_ID[item.slot]
+        if slotId then
+            model:SetItem(slotId, item.id)
+        else
+            -- fallback for unmapped slots
+            model:TryOn(item.link)
         end
     end
 
@@ -425,7 +439,7 @@ local function buildPanel()
             nameLbl:SetNonSpaceWrap(false)
 
             row:SetScript("OnClick", function()
-                tryOnItem(item.link)
+                tryOnItem(item)
             end)
             row:SetScript("OnEnter", function()
                 nameLbl:SetTextColor(UI.C_GREEN[1], UI.C_GREEN[2], UI.C_GREEN[3], 1)
@@ -448,7 +462,7 @@ local function buildPanel()
             if model then
                 model:Undress()
                 for _, it in ipairs(setItems) do
-                    model:TryOn(it.link)
+                    tryOnItem(it)
                 end
             end
         end)
