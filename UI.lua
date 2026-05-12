@@ -153,9 +153,8 @@ local function buildPanel()
     local bg = UI:NewTexture(panel, "BACKGROUND", UI.C_BG)
     bg:SetAllPoints()
 
-    -- Border + L-brackets
+    -- Border (on panel)
     UI:AddBorder(panel)
-    UI:AddCornerAccents(panel)
 
     -- --------------------------------------------------------
     -- Header strip
@@ -167,6 +166,23 @@ local function buildPanel()
     local hbg = UI:NewTexture(header, "BACKGROUND", UI.C_HEADER_BG)
     hbg:SetAllPoints()
     UI:AddTitleText(header)
+
+    -- L-brackets: top two on header (child frame, so they paint above hbg),
+    -- bottom two on panel directly.
+    local arm, thick = 10, 2
+    local g = UI.C_GREEN
+    local function brk(parent, anchor)
+        local h = parent:CreateTexture(nil, "OVERLAY")
+        h:SetColorTexture(g[1], g[2], g[3], 1)
+        h:SetPoint(anchor); h:SetSize(arm, thick)
+        local v = parent:CreateTexture(nil, "OVERLAY")
+        v:SetColorTexture(g[1], g[2], g[3], 1)
+        v:SetPoint(anchor); v:SetSize(thick, arm)
+    end
+    brk(header, "TOPLEFT")
+    brk(header, "TOPRIGHT")
+    brk(panel,  "BOTTOMLEFT")
+    brk(panel,  "BOTTOMRIGHT")
 
     -- Close button
     local closeBtn = CreateFrame("Button", nil, header)
@@ -186,14 +202,23 @@ local function buildPanel()
     end)
 
     -- Drag on header
+    local pos = db.pos
+    local function snapPosition()
+        local p, _, rp, x, y = panel:GetPoint()
+        pos.posPoint = p
+        pos.posRel   = rp or p
+        pos.posX     = x or 0
+        pos.posY     = y or 0
+    end
+    panel._snapPosition = snapPosition
+
     header:EnableMouse(true)
     header:SetScript("OnMouseDown", function(self, btn)
         if btn == "LeftButton" then panel:StartMoving() end
     end)
     header:SetScript("OnMouseUp", function()
         panel:StopMovingOrSizing()
-        local p, _, rp, x, y = panel:GetPoint()
-        db.ui.x = x; db.ui.y = y
+        snapPosition()
     end)
 
     -- --------------------------------------------------------
@@ -303,7 +328,6 @@ local function buildPanel()
     end
 
     local setRows = {}
-    function setList(class) end   -- dummy replaced below
     setList = {}
     setList.populate = function(class)
         -- Clear old rows
@@ -392,16 +416,10 @@ local function buildPanel()
             row:SetSize(ITEM_W - 8, 20)
             row:SetPoint("TOPLEFT", itemScrollContent, "TOPLEFT", 2, -(i - 1) * 22 - 2)
 
-            -- Slot label (dim, left)
-            local slotLbl = UI:NewText(row, 9, UI.C_TEXT_DIM)
-            slotLbl:SetPoint("LEFT", row, "LEFT", 2, 0)
-            slotLbl:SetText(item.slot)
-            slotLbl:SetWidth(48)
-
-            -- Item name (right of slot)
+            -- Item name (full row width)
             local nameLbl = UI:NewText(row, 10, UI.C_TEXT_NORMAL)
-            nameLbl:SetPoint("LEFT", slotLbl, "RIGHT", 4, 0)
-            nameLbl:SetPoint("RIGHT", row, "RIGHT", -2, 0)
+            nameLbl:SetPoint("LEFT",  row, "LEFT",  4, 0)
+            nameLbl:SetPoint("RIGHT", row, "RIGHT", -4, 0)
             nameLbl:SetText(item.name)
             nameLbl:SetWordWrap(false)
             nameLbl:SetNonSpaceWrap(false)
@@ -412,7 +430,9 @@ local function buildPanel()
             row:SetScript("OnEnter", function()
                 nameLbl:SetTextColor(UI.C_GREEN[1], UI.C_GREEN[2], UI.C_GREEN[3], 1)
                 GameTooltip:SetOwner(row, "ANCHOR_RIGHT")
-                GameTooltip:SetHyperlink(item.link)
+                GameTooltip:AddLine(item.name, 1, 1, 1)
+                GameTooltip:AddLine(item.slot, UI.C_TEXT_DIM[1], UI.C_TEXT_DIM[2], UI.C_TEXT_DIM[3])
+                GameTooltip:AddLine("Click to preview", 0.5, 0.5, 0.5)
                 GameTooltip:Show()
             end)
             row:SetScript("OnLeave", function()
@@ -441,6 +461,27 @@ local function buildPanel()
     model = modelFrame
     modelFrame:SetPoint("TOPLEFT",     bodyFrame, "TOPLEFT",     SIDE_W + ITEM_W + 2, 0)
     modelFrame:SetPoint("BOTTOMRIGHT", bodyFrame, "BOTTOMRIGHT", 0, 0)
+    modelFrame:EnableMouse(true)
+
+    -- Drag-to-rotate
+    local dragX     = nil
+    local facing    = 0   -- radians; 0 = default front-facing
+    modelFrame:SetScript("OnMouseDown", function(self, btn)
+        if btn == "LeftButton" then
+            dragX = select(1, GetCursorPosition())
+        end
+    end)
+    modelFrame:SetScript("OnMouseUp", function(self, btn)
+        if btn == "LeftButton" then dragX = nil end
+    end)
+    modelFrame:SetScript("OnUpdate", function(self)
+        if not dragX then return end
+        local cx = select(1, GetCursorPosition())
+        local dx = cx - dragX
+        dragX = cx
+        facing = facing + dx * 0.01
+        self:SetFacing(facing)
+    end)
 
     -- Model controls strip along the bottom of the model pane
     local modelCtrlH = 22
@@ -543,13 +584,13 @@ local function buildPanel()
         db.ui.height = newH
     end)
 
-    panel:SetMinResize(MIN_W, MIN_H)
+    -- SetMinResize does not exist in TBC 2.5.5; omit it.
 
     -- --------------------------------------------------------
-    -- Restore position from saved vars
+    -- Restore position from saved vars (posPoint == false = no saved pos yet)
     -- --------------------------------------------------------
-    if db.ui.x and db.ui.y then
-        panel:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", db.ui.x, db.ui.y)
+    if pos.posPoint and pos.posPoint ~= false then
+        panel:SetPoint(pos.posPoint, UIParent, pos.posRel, pos.posX or 0, pos.posY or 0)
     else
         panel:SetPoint("CENTER", UIParent, "CENTER")
     end
@@ -583,11 +624,18 @@ end
 -- Public API
 -- ============================================================
 function UI:Show()
-    buildPanel()
+    local ok, err = pcall(buildPanel)
+    if not ok then
+        print("|cffff4444Wick's Wardrobe|r build error: " .. tostring(err))
+        return
+    end
+    if not panel then
+        print("|cffff4444Wick's Wardrobe|r panel is nil after build")
+        return
+    end
     panel:Show()
     WW.db.ui.hidden = false
-    -- Load player on the model
-    if panel and _G.WicksWardrobeModel then
+    if _G.WicksWardrobeModel then
         _G.WicksWardrobeModel:SetUnit("player")
     end
 end
@@ -605,9 +653,16 @@ function UI:Toggle()
     end
 end
 
+function UI:SnapPosition()
+    if panel and panel._snapPosition then panel._snapPosition() end
+end
+
 function UI:Reset()
-    WW.db.ui.x = nil
-    WW.db.ui.y = nil
+    local pos = WW.db.pos
+    pos.posPoint = false
+    pos.posRel   = false
+    pos.posX     = 0
+    pos.posY     = 0
     if panel then
         panel:ClearAllPoints()
         panel:SetPoint("CENTER", UIParent, "CENTER")

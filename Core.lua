@@ -15,11 +15,10 @@ WicksWardrobeDB = WicksWardrobeDB or {}
 local DB_DEFAULTS = {
     ui = {
         hidden   = true,
-        x        = nil,
-        y        = nil,
         width    = 620,
         height   = 480,
     },
+    pos = { posPoint = false, posRel = false, posX = 0, posY = 0 },
     minimap = {
         hide     = false,
         position = 225,
@@ -75,6 +74,7 @@ WW.eventFrame = f
 local EVENTS = {
     "ADDON_LOADED",
     "PLAYER_LOGIN",
+    "PLAYER_LOGOUT",
 }
 for _, e in ipairs(EVENTS) do
     pcall(f.RegisterEvent, f, e)
@@ -91,6 +91,8 @@ f:SetScript("OnEvent", function(self, event, ...)
     elseif event == "PLAYER_LOGIN" then
         WW:Emit("LOGIN")
         print("|cff4FC778Wick's Wardrobe|r loaded. /wwd to toggle.")
+    elseif event == "PLAYER_LOGOUT" then
+        if WW.UI and WW.UI.SnapPosition then WW.UI:SnapPosition() end
     end
     WW:Emit(event, ...)
 end)
