@@ -904,6 +904,8 @@ local function buildPanel()
         end)
     end
 
+    panel._refreshSets  = refreshSets
+    panel._refreshItems = refreshItems
     panel:Hide()
 end
 
@@ -926,6 +928,23 @@ function UI:Show()
     if _G.WicksWardrobeModel then
         _G.WicksWardrobeModel:SetUnit("player")
     end
+end
+
+-- Open and navigate to a specific class + set name. Called by other Wick
+-- addons (BIS Tracker) to land on the right set without extra clicks.
+-- class: uppercase class key e.g. "MAGE", "PRIEST"
+-- setName: exact set string from WW:GetSets(class), e.g. "T4" or a custom name
+function UI:ShowWithContext(class, setName)
+    self:Show()
+    if not panel then return end
+    C_Timer.After(0, function()
+        if panel._refreshSets and class then
+            panel._refreshSets(class:upper())
+        end
+        if panel._refreshItems and setName then
+            panel._refreshItems(setName)
+        end
+    end)
 end
 
 function UI:Hide()

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2 - 2026-05-12
+
+- Added `ShowWithContext(class, setName)` API so Wick's BIS Tracker can open Wardrobe directly to the current class and list.
+
 ## 0.1.1 - 2026-05-12
 
 - Wardrobe no longer reopens automatically on login or reload. Open it manually via /wwd or the minimap button.
