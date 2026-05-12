@@ -1,8 +1,9 @@
 -- Wick's Wardrobe
 -- Data.lua: curated item database.
--- Classic T1/T2 IDs verified against wowhead.com/classic item pages.
+-- Classic T1/T2/T3 IDs verified against AtlasLootClassic/Data/ItemSet.lua.
+-- Pre-raid IDs verified against AtlasLootClassic_DungeonsAndRaids/data.lua.
 -- TBC T4-T6 IDs verified against wowhead.com/tbc item pages.
--- PvP season IDs sourced from known TBC item ID ranges.
+-- PvP S1-S4 IDs verified against AtlasLootClassic/Data/ItemSet.lua.
 
 local ADDON, ns = ...
 local WW = WicksWardrobe
@@ -19,15 +20,15 @@ end
 -- DRUID
 -- ============================================================
 WW.DATA["DRUID"] = {
-    -- Pre-Raid: Wildheart Raiment (dungeon blues)
-    S("Pre-Raid - Wildheart",   "Head",     "Wildheart Cowl",                7909),
-    S("Pre-Raid - Wildheart",   "Shoulder", "Wildheart Spaulders",           7911),
-    S("Pre-Raid - Wildheart",   "Chest",    "Wildheart Vest",                7912),
-    S("Pre-Raid - Wildheart",   "Hands",    "Wildheart Gloves",              7913),
-    S("Pre-Raid - Wildheart",   "Legs",     "Wildheart Kilt",                7914),
-    S("Pre-Raid - Wildheart",   "Feet",     "Wildheart Boots",               7915),
-    S("Pre-Raid - Wildheart",   "Waist",    "Wildheart Belt",                7910),
-    S("Pre-Raid - Wildheart",   "Wrist",    "Wildheart Bracers",             7916),
+    -- Pre-Raid: Wildheart Raiment (dungeon blues) — IDs from AtlasLoot data.lua
+    S("Pre-Raid - Wildheart",   "Head",     "Wildheart Cowl",                16720),
+    S("Pre-Raid - Wildheart",   "Shoulder", "Wildheart Spaulders",           16718),
+    S("Pre-Raid - Wildheart",   "Chest",    "Wildheart Vest",                16706),
+    S("Pre-Raid - Wildheart",   "Hands",    "Wildheart Gloves",              16717),
+    S("Pre-Raid - Wildheart",   "Legs",     "Wildheart Kilt",                16719),
+    S("Pre-Raid - Wildheart",   "Feet",     "Wildheart Boots",               16715),
+    S("Pre-Raid - Wildheart",   "Waist",    "Wildheart Belt",                16716),
+    S("Pre-Raid - Wildheart",   "Wrist",    "Wildheart Bracers",             16714),
 
     -- Classic T1: Cenarion Raiment (MC) — verified
     S("T1 - Cenarion",          "Head",     "Cenarion Helm",                 16834),
@@ -83,53 +84,53 @@ WW.DATA["DRUID"] = {
     S("T6 - Thunderheart",      "Wrist",    "Thunderheart Bracers",          34445),
     S("T6 - Thunderheart",      "Feet",     "Thunderheart Boots",            34571),
 
-    -- PvP S1: Gladiator's Dragonhide — verified via wowhead scan
-    S("PvP S1 - Dragonhide",    "Head",     "Gladiator's Dragonhide Helm",       28127),
-    S("PvP S1 - Dragonhide",    "Shoulder", "Gladiator's Dragonhide Spaulders",  28129),
-    S("PvP S1 - Dragonhide",    "Chest",    "Gladiator's Dragonhide Tunic",      28130),
-    S("PvP S1 - Dragonhide",    "Hands",    "Gladiator's Dragonhide Gloves",     28126),
-    S("PvP S1 - Dragonhide",    "Legs",     "Gladiator's Dragonhide Legguards",  28128),
+    -- PvP S1: Gladiator's Sanctuary [set 584] — AtlasLoot ItemSet.lua
+    S("PvP S1 - Sanctuary",     "Head",     "Gladiator's Sanctuary Helm",        28127),
+    S("PvP S1 - Sanctuary",     "Shoulder", "Gladiator's Sanctuary Spaulders",   28129),
+    S("PvP S1 - Sanctuary",     "Chest",    "Gladiator's Sanctuary Tunic",       28130),
+    S("PvP S1 - Sanctuary",     "Hands",    "Gladiator's Sanctuary Gloves",      28126),
+    S("PvP S1 - Sanctuary",     "Legs",     "Gladiator's Sanctuary Legguards",   28128),
 
-    -- PvP S2: Merciless Gladiator's Dragonhide
-    S("PvP S2 - Dragonhide",    "Head",     "Merciless Gladiator's Dragonhide Helm",      32002),
-    S("PvP S2 - Dragonhide",    "Shoulder", "Merciless Gladiator's Dragonhide Spaulders", 32004),
-    S("PvP S2 - Dragonhide",    "Chest",    "Merciless Gladiator's Dragonhide Tunic",     32005),
-    S("PvP S2 - Dragonhide",    "Hands",    "Merciless Gladiator's Dragonhide Gloves",    32001),
-    S("PvP S2 - Dragonhide",    "Legs",     "Merciless Gladiator's Dragonhide Legguards", 32003),
+    -- PvP S2: Merciless Gladiator's Sanctuary [set 711]
+    S("PvP S2 - Sanctuary",     "Head",     "Merciless Gladiator's Sanctuary Helm",      31971),
+    S("PvP S2 - Sanctuary",     "Shoulder", "Merciless Gladiator's Sanctuary Spaulders", 31972),
+    S("PvP S2 - Sanctuary",     "Chest",    "Merciless Gladiator's Sanctuary Tunic",     31968),
+    S("PvP S2 - Sanctuary",     "Hands",    "Merciless Gladiator's Sanctuary Gloves",    31967),
+    S("PvP S2 - Sanctuary",     "Legs",     "Merciless Gladiator's Sanctuary Legguards", 31969),
 
-    -- PvP S3: Vengeful Gladiator's Dragonhide
-    S("PvP S3 - Dragonhide",    "Head",     "Vengeful Gladiator's Dragonhide Helm",       33729),
-    S("PvP S3 - Dragonhide",    "Shoulder", "Vengeful Gladiator's Dragonhide Spaulders",  33731),
-    S("PvP S3 - Dragonhide",    "Chest",    "Vengeful Gladiator's Dragonhide Tunic",      33732),
-    S("PvP S3 - Dragonhide",    "Hands",    "Vengeful Gladiator's Dragonhide Gloves",     33728),
-    S("PvP S3 - Dragonhide",    "Legs",     "Vengeful Gladiator's Dragonhide Legguards",  33730),
+    -- PvP S3: Vengeful Gladiator's Sanctuary [set 721]
+    S("PvP S3 - Sanctuary",     "Head",     "Vengeful Gladiator's Sanctuary Helm",       33674),
+    S("PvP S3 - Sanctuary",     "Shoulder", "Vengeful Gladiator's Sanctuary Spaulders",  33675),
+    S("PvP S3 - Sanctuary",     "Chest",    "Vengeful Gladiator's Sanctuary Tunic",      33672),
+    S("PvP S3 - Sanctuary",     "Hands",    "Vengeful Gladiator's Sanctuary Gloves",     33671),
+    S("PvP S3 - Sanctuary",     "Legs",     "Vengeful Gladiator's Sanctuary Legguards",  33673),
 
-    -- PvP S4: Brutal Gladiator's Dragonhide
-    S("PvP S4 - Dragonhide",    "Head",     "Brutal Gladiator's Dragonhide Helm",         35006),
-    S("PvP S4 - Dragonhide",    "Shoulder", "Brutal Gladiator's Dragonhide Spaulders",    35008),
-    S("PvP S4 - Dragonhide",    "Chest",    "Brutal Gladiator's Dragonhide Tunic",        35009),
-    S("PvP S4 - Dragonhide",    "Hands",    "Brutal Gladiator's Dragonhide Gloves",       35005),
-    S("PvP S4 - Dragonhide",    "Legs",     "Brutal Gladiator's Dragonhide Legguards",    35007),
+    -- PvP S4: Brutal Gladiator's Sanctuary [set 2000584]
+    S("PvP S4 - Sanctuary",     "Head",     "Brutal Gladiator's Sanctuary Helm",         35001),
+    S("PvP S4 - Sanctuary",     "Shoulder", "Brutal Gladiator's Sanctuary Spaulders",    35002),
+    S("PvP S4 - Sanctuary",     "Chest",    "Brutal Gladiator's Sanctuary Tunic",        34999),
+    S("PvP S4 - Sanctuary",     "Hands",    "Brutal Gladiator's Sanctuary Gloves",       34998),
+    S("PvP S4 - Sanctuary",     "Legs",     "Brutal Gladiator's Sanctuary Legguards",    35000),
 }
 
 -- ============================================================
 -- HUNTER
 -- ============================================================
 WW.DATA["HUNTER"] = {
-    -- Pre-Raid: Beaststalker's Armor (dungeon blues)
-    S("Pre-Raid - Beaststalker", "Head",    "Beaststalker's Cap",            16467),
-    S("Pre-Raid - Beaststalker", "Shoulder","Beaststalker's Mantle",         16468),
-    S("Pre-Raid - Beaststalker", "Chest",   "Beaststalker's Tunic",          16466),
-    S("Pre-Raid - Beaststalker", "Hands",   "Beaststalker's Gloves",         16469),
-    S("Pre-Raid - Beaststalker", "Legs",    "Beaststalker's Pants",          16470),
-    S("Pre-Raid - Beaststalker", "Feet",    "Beaststalker's Boots",          16471),
-    S("Pre-Raid - Beaststalker", "Waist",   "Beaststalker's Belt",           16472),
-    S("Pre-Raid - Beaststalker", "Wrist",   "Beaststalker's Bindings",       16473),
+    -- Pre-Raid: Beaststalker's Armor (dungeon blues) — IDs from AtlasLoot data.lua
+    S("Pre-Raid - Beaststalker", "Head",    "Beaststalker's Cap",            16677),
+    S("Pre-Raid - Beaststalker", "Shoulder","Beaststalker's Mantle",         16679),
+    S("Pre-Raid - Beaststalker", "Chest",   "Beaststalker's Tunic",          16674),
+    S("Pre-Raid - Beaststalker", "Hands",   "Beaststalker's Gloves",         16676),
+    S("Pre-Raid - Beaststalker", "Legs",    "Beaststalker's Pants",          16678),
+    S("Pre-Raid - Beaststalker", "Feet",    "Beaststalker's Boots",          16675),
+    S("Pre-Raid - Beaststalker", "Waist",   "Beaststalker's Belt",           16680),
+    S("Pre-Raid - Beaststalker", "Wrist",   "Beaststalker's Bindings",       16681),
 
-    -- Classic T1: Giantstalker's Armor (MC) — verified
-    S("T1 - Giantstalker",      "Head",     "Giantstalker's Helmet",         16876),
+    -- Classic T1: Giantstalker's Armor (MC) — IDs from AtlasLoot ItemSet.lua
+    S("T1 - Giantstalker",      "Head",     "Giantstalker's Helmet",         16846),
     S("T1 - Giantstalker",      "Shoulder", "Giantstalker's Epaulets",       16848),
-    S("T1 - Giantstalker",      "Chest",    "Giantstalker's Breastplate",    16878),
+    S("T1 - Giantstalker",      "Chest",    "Giantstalker's Breastplate",    16845),
     S("T1 - Giantstalker",      "Hands",    "Giantstalker's Gloves",         16852),
     S("T1 - Giantstalker",      "Legs",     "Giantstalker's Leggings",       16847),
     S("T1 - Giantstalker",      "Feet",     "Giantstalker's Boots",          16849),
@@ -180,48 +181,48 @@ WW.DATA["HUNTER"] = {
     S("T6 - Gronnstalker's",    "Wrist",    "Gronnstalker's Bracers",        34443),
     S("T6 - Gronnstalker's",    "Feet",     "Gronnstalker's Boots",          34570),
 
-    -- PvP S1: Gladiator's Chain Armor — verified via wowhead scan
-    S("PvP S1 - Chain",         "Head",     "Gladiator's Chain Helm",            28107),
-    S("PvP S1 - Chain",         "Shoulder", "Gladiator's Chain Spaulders",       28109),
-    S("PvP S1 - Chain",         "Chest",    "Gladiator's Chain Armor",           28110),
-    S("PvP S1 - Chain",         "Hands",    "Gladiator's Chain Gauntlets",       28106),
-    S("PvP S1 - Chain",         "Legs",     "Gladiator's Chain Leggings",        28108),
+    -- PvP S1: Gladiator's Pursuit [set 586] — AtlasLoot ItemSet.lua
+    S("PvP S1 - Pursuit",       "Head",     "Gladiator's Pursuit Helm",          28333),
+    S("PvP S1 - Pursuit",       "Shoulder", "Gladiator's Pursuit Spaulders",     28334),
+    S("PvP S1 - Pursuit",       "Chest",    "Gladiator's Pursuit Tunic",         28331),
+    S("PvP S1 - Pursuit",       "Hands",    "Gladiator's Pursuit Gauntlets",     28335),
+    S("PvP S1 - Pursuit",       "Legs",     "Gladiator's Pursuit Legguards",     28332),
 
-    -- PvP S2: Merciless Gladiator's Chain Armor
-    S("PvP S2 - Chain",         "Head",     "Merciless Gladiator's Chain Helm",      32007),
-    S("PvP S2 - Chain",         "Shoulder", "Merciless Gladiator's Chain Spaulders", 32009),
-    S("PvP S2 - Chain",         "Chest",    "Merciless Gladiator's Chain Armor",     32010),
-    S("PvP S2 - Chain",         "Hands",    "Merciless Gladiator's Chain Gauntlets", 32006),
-    S("PvP S2 - Chain",         "Legs",     "Merciless Gladiator's Chain Leggings",  32008),
+    -- PvP S2: Merciless Gladiator's Pursuit [set 706]
+    S("PvP S2 - Pursuit",       "Head",     "Merciless Gladiator's Pursuit Helm",      31964),
+    S("PvP S2 - Pursuit",       "Shoulder", "Merciless Gladiator's Pursuit Spaulders", 31960),
+    S("PvP S2 - Pursuit",       "Chest",    "Merciless Gladiator's Pursuit Tunic",     31962),
+    S("PvP S2 - Pursuit",       "Hands",    "Merciless Gladiator's Pursuit Gauntlets", 31961),
+    S("PvP S2 - Pursuit",       "Legs",     "Merciless Gladiator's Pursuit Legguards", 31963),
 
-    -- PvP S3: Vengeful Gladiator's Chain Armor
-    S("PvP S3 - Chain",         "Head",     "Vengeful Gladiator's Chain Helm",       33734),
-    S("PvP S3 - Chain",         "Shoulder", "Vengeful Gladiator's Chain Spaulders",  33736),
-    S("PvP S3 - Chain",         "Chest",    "Vengeful Gladiator's Chain Armor",      33737),
-    S("PvP S3 - Chain",         "Hands",    "Vengeful Gladiator's Chain Gauntlets",  33733),
-    S("PvP S3 - Chain",         "Legs",     "Vengeful Gladiator's Chain Leggings",   33735),
+    -- PvP S3: Vengeful Gladiator's Pursuit [set 723]
+    S("PvP S3 - Pursuit",       "Head",     "Vengeful Gladiator's Pursuit Helm",       33668),
+    S("PvP S3 - Pursuit",       "Shoulder", "Vengeful Gladiator's Pursuit Spaulders",  33664),
+    S("PvP S3 - Pursuit",       "Chest",    "Vengeful Gladiator's Pursuit Tunic",      33666),
+    S("PvP S3 - Pursuit",       "Hands",    "Vengeful Gladiator's Pursuit Gauntlets",  33665),
+    S("PvP S3 - Pursuit",       "Legs",     "Vengeful Gladiator's Pursuit Legguards",  33667),
 
-    -- PvP S4: Brutal Gladiator's Chain Armor
-    S("PvP S4 - Chain",         "Head",     "Brutal Gladiator's Chain Helm",         35011),
-    S("PvP S4 - Chain",         "Shoulder", "Brutal Gladiator's Chain Spaulders",    35013),
-    S("PvP S4 - Chain",         "Chest",    "Brutal Gladiator's Chain Armor",        35014),
-    S("PvP S4 - Chain",         "Hands",    "Brutal Gladiator's Chain Gauntlets",    35010),
-    S("PvP S4 - Chain",         "Legs",     "Brutal Gladiator's Chain Leggings",     35012),
+    -- PvP S4: Brutal Gladiator's Pursuit [set 2000586]
+    S("PvP S4 - Pursuit",       "Head",     "Brutal Gladiator's Pursuit Helm",         34994),
+    S("PvP S4 - Pursuit",       "Shoulder", "Brutal Gladiator's Pursuit Spaulders",    34990),
+    S("PvP S4 - Pursuit",       "Chest",    "Brutal Gladiator's Pursuit Tunic",        34992),
+    S("PvP S4 - Pursuit",       "Hands",    "Brutal Gladiator's Pursuit Gauntlets",    34991),
+    S("PvP S4 - Pursuit",       "Legs",     "Brutal Gladiator's Pursuit Legguards",    34993),
 }
 
 -- ============================================================
 -- MAGE
 -- ============================================================
 WW.DATA["MAGE"] = {
-    -- Pre-Raid: Magister's Regalia (dungeon blues)
-    S("Pre-Raid - Magister's",  "Head",     "Magister's Crown",              10796),
-    S("Pre-Raid - Magister's",  "Shoulder", "Magister's Mantle",             10790),
-    S("Pre-Raid - Magister's",  "Chest",    "Magister's Robes",              10792),
-    S("Pre-Raid - Magister's",  "Hands",    "Magister's Gloves",             10793),
-    S("Pre-Raid - Magister's",  "Legs",     "Magister's Leggings",           10794),
-    S("Pre-Raid - Magister's",  "Feet",     "Magister's Boots",              10791),
-    S("Pre-Raid - Magister's",  "Waist",    "Magister's Belt",               10789),
-    S("Pre-Raid - Magister's",  "Wrist",    "Magister's Bindings",           10803),
+    -- Pre-Raid: Magister's Regalia (dungeon blues) — IDs from AtlasLoot data.lua
+    S("Pre-Raid - Magister's",  "Head",     "Magister's Crown",              16686),
+    S("Pre-Raid - Magister's",  "Shoulder", "Magister's Mantle",             16689),
+    S("Pre-Raid - Magister's",  "Chest",    "Magister's Robes",              16688),
+    S("Pre-Raid - Magister's",  "Hands",    "Magister's Gloves",             16684),
+    S("Pre-Raid - Magister's",  "Legs",     "Magister's Leggings",           16687),
+    S("Pre-Raid - Magister's",  "Feet",     "Magister's Boots",              16682),
+    S("Pre-Raid - Magister's",  "Waist",    "Magister's Belt",               16685),
+    S("Pre-Raid - Magister's",  "Wrist",    "Magister's Bindings",           16683),
 
     -- Classic T1: Arcanist Regalia (MC) — verified
     S("T1 - Arcanist",          "Head",     "Arcanist Crown",                16795),
@@ -277,48 +278,48 @@ WW.DATA["MAGE"] = {
     S("T6 - Tempest",           "Wrist",    "Bracers of the Tempest",        34447),
     S("T6 - Tempest",           "Feet",     "Boots of the Tempest",          34574),
 
-    -- PvP S1: Gladiator's Silk Armor
-    S("PvP S1 - Silk",          "Head",     "Gladiator's Silk Hood",             28196),
-    S("PvP S1 - Silk",          "Shoulder", "Gladiator's Silk Amice",            28198),
-    S("PvP S1 - Silk",          "Chest",    "Gladiator's Silk Raiment",          28199),
-    S("PvP S1 - Silk",          "Hands",    "Gladiator's Silk Handguards",       28195),
-    S("PvP S1 - Silk",          "Legs",     "Gladiator's Silk Trousers",         28197),
+    -- PvP S1: Gladiator's Regalia [set 579] — AtlasLoot ItemSet.lua
+    S("PvP S1 - Regalia",       "Head",     "Gladiator's Regalia Hood",          25854),
+    S("PvP S1 - Regalia",       "Shoulder", "Gladiator's Regalia Amice",         25856),
+    S("PvP S1 - Regalia",       "Chest",    "Gladiator's Regalia Robe",          25855),
+    S("PvP S1 - Regalia",       "Hands",    "Gladiator's Regalia Handguards",    25857),
+    S("PvP S1 - Regalia",       "Legs",     "Gladiator's Regalia Leggings",      25858),
 
-    -- PvP S2: Merciless Gladiator's Silk Armor
-    S("PvP S2 - Silk",          "Head",     "Merciless Gladiator's Silk Hood",       32022),
-    S("PvP S2 - Silk",          "Shoulder", "Merciless Gladiator's Silk Amice",      32024),
-    S("PvP S2 - Silk",          "Chest",    "Merciless Gladiator's Silk Raiment",    32025),
-    S("PvP S2 - Silk",          "Hands",    "Merciless Gladiator's Silk Handguards", 32021),
-    S("PvP S2 - Silk",          "Legs",     "Merciless Gladiator's Silk Trousers",   32023),
+    -- PvP S2: Merciless Gladiator's Regalia [set 710]
+    S("PvP S2 - Regalia",       "Head",     "Merciless Gladiator's Regalia Hood",      32047),
+    S("PvP S2 - Regalia",       "Shoulder", "Merciless Gladiator's Regalia Amice",     32050),
+    S("PvP S2 - Regalia",       "Chest",    "Merciless Gladiator's Regalia Robe",      32048),
+    S("PvP S2 - Regalia",       "Hands",    "Merciless Gladiator's Regalia Handguards",32049),
+    S("PvP S2 - Regalia",       "Legs",     "Merciless Gladiator's Regalia Leggings",  32051),
 
-    -- PvP S3: Vengeful Gladiator's Silk Armor
-    S("PvP S3 - Silk",          "Head",     "Vengeful Gladiator's Silk Hood",        33749),
-    S("PvP S3 - Silk",          "Shoulder", "Vengeful Gladiator's Silk Amice",       33751),
-    S("PvP S3 - Silk",          "Chest",    "Vengeful Gladiator's Silk Raiment",     33752),
-    S("PvP S3 - Silk",          "Hands",    "Vengeful Gladiator's Silk Handguards",  33748),
-    S("PvP S3 - Silk",          "Legs",     "Vengeful Gladiator's Silk Trousers",    33750),
+    -- PvP S3: Vengeful Gladiator's Regalia [set 724]
+    S("PvP S3 - Regalia",       "Head",     "Vengeful Gladiator's Regalia Hood",       33757),
+    S("PvP S3 - Regalia",       "Shoulder", "Vengeful Gladiator's Regalia Amice",      33760),
+    S("PvP S3 - Regalia",       "Chest",    "Vengeful Gladiator's Regalia Robe",       33758),
+    S("PvP S3 - Regalia",       "Hands",    "Vengeful Gladiator's Regalia Handguards", 33759),
+    S("PvP S3 - Regalia",       "Legs",     "Vengeful Gladiator's Regalia Leggings",   33761),
 
-    -- PvP S4: Brutal Gladiator's Silk Armor
-    S("PvP S4 - Silk",          "Head",     "Brutal Gladiator's Silk Hood",          35029),
-    S("PvP S4 - Silk",          "Shoulder", "Brutal Gladiator's Silk Amice",         35031),
-    S("PvP S4 - Silk",          "Chest",    "Brutal Gladiator's Silk Raiment",       35032),
-    S("PvP S4 - Silk",          "Hands",    "Brutal Gladiator's Silk Handguards",    35028),
-    S("PvP S4 - Silk",          "Legs",     "Brutal Gladiator's Silk Trousers",      35030),
+    -- PvP S4: Brutal Gladiator's Regalia [set 2000579]
+    S("PvP S4 - Regalia",       "Head",     "Brutal Gladiator's Regalia Hood",         35096),
+    S("PvP S4 - Regalia",       "Shoulder", "Brutal Gladiator's Regalia Amice",        35099),
+    S("PvP S4 - Regalia",       "Chest",    "Brutal Gladiator's Regalia Robe",         35097),
+    S("PvP S4 - Regalia",       "Hands",    "Brutal Gladiator's Regalia Handguards",   35098),
+    S("PvP S4 - Regalia",       "Legs",     "Brutal Gladiator's Regalia Leggings",     35100),
 }
 
 -- ============================================================
 -- PALADIN
 -- ============================================================
 WW.DATA["PALADIN"] = {
-    -- Pre-Raid: Lightforge Armor (dungeon blues)
-    S("Pre-Raid - Lightforge",  "Head",     "Lightforge Helm",               10770),
-    S("Pre-Raid - Lightforge",  "Shoulder", "Lightforge Spaulders",          10778),
-    S("Pre-Raid - Lightforge",  "Chest",    "Lightforge Breastplate",        10772),
-    S("Pre-Raid - Lightforge",  "Hands",    "Lightforge Gauntlets",          10776),
-    S("Pre-Raid - Lightforge",  "Legs",     "Lightforge Legplates",          10774),
-    S("Pre-Raid - Lightforge",  "Feet",     "Lightforge Boots",              10771),
-    S("Pre-Raid - Lightforge",  "Waist",    "Lightforge Belt",               10769),
-    S("Pre-Raid - Lightforge",  "Wrist",    "Lightforge Bracers",            10779),
+    -- Pre-Raid: Lightforge Armor (dungeon blues) — IDs from AtlasLoot data.lua
+    S("Pre-Raid - Lightforge",  "Head",     "Lightforge Helm",               16727),
+    S("Pre-Raid - Lightforge",  "Shoulder", "Lightforge Spaulders",          16729),
+    S("Pre-Raid - Lightforge",  "Chest",    "Lightforge Breastplate",        16726),
+    S("Pre-Raid - Lightforge",  "Hands",    "Lightforge Gauntlets",          16724),
+    S("Pre-Raid - Lightforge",  "Legs",     "Lightforge Legplates",          16728),
+    S("Pre-Raid - Lightforge",  "Feet",     "Lightforge Boots",              16725),
+    S("Pre-Raid - Lightforge",  "Waist",    "Lightforge Belt",               16723),
+    S("Pre-Raid - Lightforge",  "Wrist",    "Lightforge Bracers",            16722),
 
     -- Classic T1: Lawbringer Armor (MC) — partially verified
     S("T1 - Lawbringer",        "Head",     "Lawbringer Helm",               16854),
@@ -374,48 +375,48 @@ WW.DATA["PALADIN"] = {
     S("T6 - Lightbringer",      "Wrist",    "Lightbringer Wristguards",      34433),
     S("T6 - Lightbringer",      "Feet",     "Lightbringer Stompers",         34560),
 
-    -- PvP S1: Gladiator's Lamellar (Paladin Plate)
-    S("PvP S1 - Lamellar",      "Head",     "Gladiator's Lamellar Helm",         28102),
-    S("PvP S1 - Lamellar",      "Shoulder", "Gladiator's Lamellar Shoulders",    28104),
-    S("PvP S1 - Lamellar",      "Chest",    "Gladiator's Lamellar Chestpiece",   28105),
-    S("PvP S1 - Lamellar",      "Hands",    "Gladiator's Lamellar Gauntlets",    28101),
-    S("PvP S1 - Lamellar",      "Legs",     "Gladiator's Lamellar Legguards",    28103),
+    -- PvP S1: Gladiator's Aegis [set 582] — AtlasLoot ItemSet.lua
+    S("PvP S1 - Aegis",         "Head",     "Gladiator's Aegis Helm",            27706),
+    S("PvP S1 - Aegis",         "Shoulder", "Gladiator's Aegis Spaulders",       27702),
+    S("PvP S1 - Aegis",         "Chest",    "Gladiator's Aegis Chestguard",      27704),
+    S("PvP S1 - Aegis",         "Hands",    "Gladiator's Aegis Gauntlets",       27703),
+    S("PvP S1 - Aegis",         "Legs",     "Gladiator's Aegis Legguards",       27705),
 
-    -- PvP S2: Merciless Gladiator's Lamellar
-    S("PvP S2 - Lamellar",      "Head",     "Merciless Gladiator's Lamellar Helm",        32012),
-    S("PvP S2 - Lamellar",      "Shoulder", "Merciless Gladiator's Lamellar Shoulders",   32014),
-    S("PvP S2 - Lamellar",      "Chest",    "Merciless Gladiator's Lamellar Chestpiece",  32015),
-    S("PvP S2 - Lamellar",      "Hands",    "Merciless Gladiator's Lamellar Gauntlets",   32011),
-    S("PvP S2 - Lamellar",      "Legs",     "Merciless Gladiator's Lamellar Legguards",   32013),
+    -- PvP S2: Merciless Gladiator's Aegis [set 700]
+    S("PvP S2 - Aegis",         "Head",     "Merciless Gladiator's Aegis Helm",      31996),
+    S("PvP S2 - Aegis",         "Shoulder", "Merciless Gladiator's Aegis Spaulders", 31992),
+    S("PvP S2 - Aegis",         "Chest",    "Merciless Gladiator's Aegis Chestguard",31997),
+    S("PvP S2 - Aegis",         "Hands",    "Merciless Gladiator's Aegis Gauntlets", 31993),
+    S("PvP S2 - Aegis",         "Legs",     "Merciless Gladiator's Aegis Legguards", 31995),
 
-    -- PvP S3: Vengeful Gladiator's Lamellar
-    S("PvP S3 - Lamellar",      "Head",     "Vengeful Gladiator's Lamellar Helm",         33739),
-    S("PvP S3 - Lamellar",      "Shoulder", "Vengeful Gladiator's Lamellar Shoulders",    33741),
-    S("PvP S3 - Lamellar",      "Chest",    "Vengeful Gladiator's Lamellar Chestpiece",   33742),
-    S("PvP S3 - Lamellar",      "Hands",    "Vengeful Gladiator's Lamellar Gauntlets",    33738),
-    S("PvP S3 - Lamellar",      "Legs",     "Vengeful Gladiator's Lamellar Legguards",    33740),
+    -- PvP S3: Vengeful Gladiator's Aegis [set 727]
+    S("PvP S3 - Aegis",         "Head",     "Vengeful Gladiator's Aegis Helm",       33699),
+    S("PvP S3 - Aegis",         "Shoulder", "Vengeful Gladiator's Aegis Spaulders",  33695),
+    S("PvP S3 - Aegis",         "Chest",    "Vengeful Gladiator's Aegis Chestguard", 33697),
+    S("PvP S3 - Aegis",         "Hands",    "Vengeful Gladiator's Aegis Gauntlets",  33696),
+    S("PvP S3 - Aegis",         "Legs",     "Vengeful Gladiator's Aegis Legguards",  33698),
 
-    -- PvP S4: Brutal Gladiator's Lamellar
-    S("PvP S4 - Lamellar",      "Head",     "Brutal Gladiator's Lamellar Helm",           35016),
-    S("PvP S4 - Lamellar",      "Shoulder", "Brutal Gladiator's Lamellar Shoulders",      35018),
-    S("PvP S4 - Lamellar",      "Chest",    "Brutal Gladiator's Lamellar Chestpiece",     35019),
-    S("PvP S4 - Lamellar",      "Hands",    "Brutal Gladiator's Lamellar Gauntlets",      35015),
-    S("PvP S4 - Lamellar",      "Legs",     "Brutal Gladiator's Lamellar Legguards",      35017),
+    -- PvP S4: Brutal Gladiator's Aegis [set 2000582]
+    S("PvP S4 - Aegis",         "Head",     "Brutal Gladiator's Aegis Helm",         35031),
+    S("PvP S4 - Aegis",         "Shoulder", "Brutal Gladiator's Aegis Spaulders",    35027),
+    S("PvP S4 - Aegis",         "Chest",    "Brutal Gladiator's Aegis Chestguard",   35029),
+    S("PvP S4 - Aegis",         "Hands",    "Brutal Gladiator's Aegis Gauntlets",    35028),
+    S("PvP S4 - Aegis",         "Legs",     "Brutal Gladiator's Aegis Legguards",    35030),
 }
 
 -- ============================================================
 -- PRIEST
 -- ============================================================
 WW.DATA["PRIEST"] = {
-    -- Pre-Raid: Devout Regalia (dungeon blues)
-    S("Pre-Raid - Devout",      "Head",     "Devout Crown",                  10819),
-    S("Pre-Raid - Devout",      "Shoulder", "Devout Mantle",                 10787),
-    S("Pre-Raid - Devout",      "Chest",    "Devout Robe",                   10816),
-    S("Pre-Raid - Devout",      "Hands",    "Devout Gloves",                 10785),
-    S("Pre-Raid - Devout",      "Legs",     "Devout Skirt",                  10788),
-    S("Pre-Raid - Devout",      "Feet",     "Devout Sandals",                10786),
-    S("Pre-Raid - Devout",      "Waist",    "Devout Belt",                   10784),
-    S("Pre-Raid - Devout",      "Wrist",    "Devout Bracers",                10783),
+    -- Pre-Raid: Devout Regalia (dungeon blues) — IDs from AtlasLoot data.lua
+    S("Pre-Raid - Devout",      "Head",     "Devout Crown",                  16693),
+    S("Pre-Raid - Devout",      "Shoulder", "Devout Mantle",                 16695),
+    S("Pre-Raid - Devout",      "Chest",    "Devout Robe",                   16690),
+    S("Pre-Raid - Devout",      "Hands",    "Devout Gloves",                 16692),
+    S("Pre-Raid - Devout",      "Legs",     "Devout Skirt",                  16694),
+    S("Pre-Raid - Devout",      "Feet",     "Devout Sandals",                16691),
+    S("Pre-Raid - Devout",      "Waist",    "Devout Belt",                   16696),
+    S("Pre-Raid - Devout",      "Wrist",    "Devout Bracers",                16697),
 
     -- Classic T1: Vestments of Prophecy (MC) — verified
     S("T1 - Prophecy",          "Head",     "Circlet of Prophecy",           16813),
@@ -471,48 +472,48 @@ WW.DATA["PRIEST"] = {
     S("T6 - Absolution",        "Wrist",    "Cuffs of Absolution",           34435),
     S("T6 - Absolution",        "Feet",     "Boots of Absolution",           34562),
 
-    -- PvP S1: Gladiator's Mooncloth
-    S("PvP S1 - Mooncloth",     "Head",     "Gladiator's Mooncloth Hood",        28209),
-    S("PvP S1 - Mooncloth",     "Shoulder", "Gladiator's Mooncloth Mantle",      28211),
-    S("PvP S1 - Mooncloth",     "Chest",    "Gladiator's Mooncloth Robe",        28212),
-    S("PvP S1 - Mooncloth",     "Hands",    "Gladiator's Mooncloth Gloves",      28208),
-    S("PvP S1 - Mooncloth",     "Legs",     "Gladiator's Mooncloth Leggings",    28210),
+    -- PvP S1: Gladiator's Raiment [set 581] — AtlasLoot ItemSet.lua
+    S("PvP S1 - Raiment",       "Head",     "Gladiator's Raiment Hood",          27710),
+    S("PvP S1 - Raiment",       "Shoulder", "Gladiator's Raiment Mantle",        27711),
+    S("PvP S1 - Raiment",       "Chest",    "Gladiator's Raiment Robe",          27708),
+    S("PvP S1 - Raiment",       "Hands",    "Gladiator's Raiment Gloves",        27707),
+    S("PvP S1 - Raiment",       "Legs",     "Gladiator's Raiment Leggings",      27709),
 
-    -- PvP S2: Merciless Gladiator's Mooncloth
-    S("PvP S2 - Mooncloth",     "Head",     "Merciless Gladiator's Mooncloth Hood",     32027),
-    S("PvP S2 - Mooncloth",     "Shoulder", "Merciless Gladiator's Mooncloth Mantle",   32029),
-    S("PvP S2 - Mooncloth",     "Chest",    "Merciless Gladiator's Mooncloth Robe",     32030),
-    S("PvP S2 - Mooncloth",     "Hands",    "Merciless Gladiator's Mooncloth Gloves",   32026),
-    S("PvP S2 - Mooncloth",     "Legs",     "Merciless Gladiator's Mooncloth Leggings", 32028),
+    -- PvP S2: Merciless Gladiator's Raiment [set 707]
+    S("PvP S2 - Raiment",       "Head",     "Merciless Gladiator's Raiment Hood",      32037),
+    S("PvP S2 - Raiment",       "Shoulder", "Merciless Gladiator's Raiment Mantle",    32038),
+    S("PvP S2 - Raiment",       "Chest",    "Merciless Gladiator's Raiment Robe",      32035),
+    S("PvP S2 - Raiment",       "Hands",    "Merciless Gladiator's Raiment Gloves",    32034),
+    S("PvP S2 - Raiment",       "Legs",     "Merciless Gladiator's Raiment Leggings",  32036),
 
-    -- PvP S3: Vengeful Gladiator's Mooncloth
-    S("PvP S3 - Mooncloth",     "Head",     "Vengeful Gladiator's Mooncloth Hood",      33754),
-    S("PvP S3 - Mooncloth",     "Shoulder", "Vengeful Gladiator's Mooncloth Mantle",    33756),
-    S("PvP S3 - Mooncloth",     "Chest",    "Vengeful Gladiator's Mooncloth Robe",      33757),
-    S("PvP S3 - Mooncloth",     "Hands",    "Vengeful Gladiator's Mooncloth Gloves",    33753),
-    S("PvP S3 - Mooncloth",     "Legs",     "Vengeful Gladiator's Mooncloth Leggings",  33755),
+    -- PvP S3: Vengeful Gladiator's Raiment [set 729]
+    S("PvP S3 - Raiment",       "Head",     "Vengeful Gladiator's Raiment Hood",       33747),
+    S("PvP S3 - Raiment",       "Shoulder", "Vengeful Gladiator's Raiment Mantle",     33748),
+    S("PvP S3 - Raiment",       "Chest",    "Vengeful Gladiator's Raiment Robe",       33745),
+    S("PvP S3 - Raiment",       "Hands",    "Vengeful Gladiator's Raiment Gloves",     33744),
+    S("PvP S3 - Raiment",       "Legs",     "Vengeful Gladiator's Raiment Leggings",   33746),
 
-    -- PvP S4: Brutal Gladiator's Mooncloth
-    S("PvP S4 - Mooncloth",     "Head",     "Brutal Gladiator's Mooncloth Hood",        35034),
-    S("PvP S4 - Mooncloth",     "Shoulder", "Brutal Gladiator's Mooncloth Mantle",      35036),
-    S("PvP S4 - Mooncloth",     "Chest",    "Brutal Gladiator's Mooncloth Robe",        35037),
-    S("PvP S4 - Mooncloth",     "Hands",    "Brutal Gladiator's Mooncloth Gloves",      35033),
-    S("PvP S4 - Mooncloth",     "Legs",     "Brutal Gladiator's Mooncloth Leggings",    35035),
+    -- PvP S4: Brutal Gladiator's Raiment [set 2000581]
+    S("PvP S4 - Raiment",       "Head",     "Brutal Gladiator's Raiment Hood",         35086),
+    S("PvP S4 - Raiment",       "Shoulder", "Brutal Gladiator's Raiment Mantle",       35087),
+    S("PvP S4 - Raiment",       "Chest",    "Brutal Gladiator's Raiment Robe",         35084),
+    S("PvP S4 - Raiment",       "Hands",    "Brutal Gladiator's Raiment Gloves",       35083),
+    S("PvP S4 - Raiment",       "Legs",     "Brutal Gladiator's Raiment Leggings",     35085),
 }
 
 -- ============================================================
 -- ROGUE
 -- ============================================================
 WW.DATA["ROGUE"] = {
-    -- Pre-Raid: Shadowcraft Armor (dungeon blues)
-    S("Pre-Raid - Shadowcraft",  "Head",    "Shadowcraft Cap",               10741),
-    S("Pre-Raid - Shadowcraft",  "Shoulder","Shadowcraft Spaulders",         10742),
-    S("Pre-Raid - Shadowcraft",  "Chest",   "Shadowcraft Tunic",             10745),
-    S("Pre-Raid - Shadowcraft",  "Hands",   "Shadowcraft Gloves",            10744),
-    S("Pre-Raid - Shadowcraft",  "Legs",    "Shadowcraft Pants",             10746),
-    S("Pre-Raid - Shadowcraft",  "Feet",    "Shadowcraft Boots",             10743),
-    S("Pre-Raid - Shadowcraft",  "Waist",   "Shadowcraft Belt",              10740),
-    S("Pre-Raid - Shadowcraft",  "Wrist",   "Shadowcraft Bracers",           10747),
+    -- Pre-Raid: Shadowcraft Armor (dungeon blues) — IDs from AtlasLoot data.lua
+    S("Pre-Raid - Shadowcraft",  "Head",    "Shadowcraft Cap",               16707),
+    S("Pre-Raid - Shadowcraft",  "Shoulder","Shadowcraft Spaulders",         16708),
+    S("Pre-Raid - Shadowcraft",  "Chest",   "Shadowcraft Tunic",             16721),
+    S("Pre-Raid - Shadowcraft",  "Hands",   "Shadowcraft Gloves",            16712),
+    S("Pre-Raid - Shadowcraft",  "Legs",    "Shadowcraft Pants",             16709),
+    S("Pre-Raid - Shadowcraft",  "Feet",    "Shadowcraft Boots",             16711),
+    S("Pre-Raid - Shadowcraft",  "Waist",   "Shadowcraft Belt",              16713),
+    S("Pre-Raid - Shadowcraft",  "Wrist",   "Shadowcraft Bracers",           16710),
 
     -- Classic T1: Nightslayer Armor (MC) — verified
     S("T1 - Nightslayer",       "Head",     "Nightslayer Cover",             16821),
@@ -568,33 +569,33 @@ WW.DATA["ROGUE"] = {
     S("T6 - Slayer's Armor",    "Wrist",    "Slayer's Bracers",              34448),
     S("T6 - Slayer's Armor",    "Feet",     "Slayer's Boots",                34575),
 
-    -- PvP S1: Gladiator's Wyrmhide — verified via wowhead scan
-    S("PvP S1 - Wyrmhide",      "Head",     "Gladiator's Wyrmhide Helm",         28137),
-    S("PvP S1 - Wyrmhide",      "Shoulder", "Gladiator's Wyrmhide Spaulders",    28139),
-    S("PvP S1 - Wyrmhide",      "Chest",    "Gladiator's Wyrmhide Tunic",        28140),
-    S("PvP S1 - Wyrmhide",      "Hands",    "Gladiator's Wyrmhide Gloves",       28136),
-    S("PvP S1 - Wyrmhide",      "Legs",     "Gladiator's Wyrmhide Legguards",    28138),
+    -- PvP S1: Gladiator's Wildhide [set 585] — AtlasLoot ItemSet.lua
+    S("PvP S1 - Wildhide",      "Head",     "Gladiator's Wildhide Helm",         28139),
+    S("PvP S1 - Wildhide",      "Shoulder", "Gladiator's Wildhide Spaulders",    28140),
+    S("PvP S1 - Wildhide",      "Chest",    "Gladiator's Wildhide Tunic",        28137),
+    S("PvP S1 - Wildhide",      "Hands",    "Gladiator's Wildhide Gloves",       28136),
+    S("PvP S1 - Wildhide",      "Legs",     "Gladiator's Wildhide Legguards",    28138),
 
-    -- PvP S2: Merciless Gladiator's Wyrmhide
-    S("PvP S2 - Wyrmhide",      "Head",     "Merciless Gladiator's Wyrmhide Helm",      32017),
-    S("PvP S2 - Wyrmhide",      "Shoulder", "Merciless Gladiator's Wyrmhide Spaulders", 32019),
-    S("PvP S2 - Wyrmhide",      "Chest",    "Merciless Gladiator's Wyrmhide Tunic",     32020),
-    S("PvP S2 - Wyrmhide",      "Hands",    "Merciless Gladiator's Wyrmhide Gloves",    32016),
-    S("PvP S2 - Wyrmhide",      "Legs",     "Merciless Gladiator's Wyrmhide Legguards", 32018),
+    -- PvP S2: Merciless Gladiator's Wildhide [set 716]
+    S("PvP S2 - Wildhide",      "Head",     "Merciless Gladiator's Wildhide Helm",      32059),
+    S("PvP S2 - Wildhide",      "Shoulder", "Merciless Gladiator's Wildhide Spaulders", 32060),
+    S("PvP S2 - Wildhide",      "Chest",    "Merciless Gladiator's Wildhide Tunic",     32057),
+    S("PvP S2 - Wildhide",      "Hands",    "Merciless Gladiator's Wildhide Gloves",    32056),
+    S("PvP S2 - Wildhide",      "Legs",     "Merciless Gladiator's Wildhide Legguards", 32058),
 
-    -- PvP S3: Vengeful Gladiator's Wyrmhide
-    S("PvP S3 - Wyrmhide",      "Head",     "Vengeful Gladiator's Wyrmhide Helm",       33744),
-    S("PvP S3 - Wyrmhide",      "Shoulder", "Vengeful Gladiator's Wyrmhide Spaulders",  33746),
-    S("PvP S3 - Wyrmhide",      "Chest",    "Vengeful Gladiator's Wyrmhide Tunic",      33747),
-    S("PvP S3 - Wyrmhide",      "Hands",    "Vengeful Gladiator's Wyrmhide Gloves",     33743),
-    S("PvP S3 - Wyrmhide",      "Legs",     "Vengeful Gladiator's Wyrmhide Legguards",  33745),
+    -- PvP S3: Vengeful Gladiator's Wildhide [set 722]
+    S("PvP S3 - Wildhide",      "Head",     "Vengeful Gladiator's Wildhide Helm",       33770),
+    S("PvP S3 - Wildhide",      "Shoulder", "Vengeful Gladiator's Wildhide Spaulders",  33771),
+    S("PvP S3 - Wildhide",      "Chest",    "Vengeful Gladiator's Wildhide Tunic",      33768),
+    S("PvP S3 - Wildhide",      "Hands",    "Vengeful Gladiator's Wildhide Gloves",     33767),
+    S("PvP S3 - Wildhide",      "Legs",     "Vengeful Gladiator's Wildhide Legguards",  33769),
 
-    -- PvP S4: Brutal Gladiator's Wyrmhide
-    S("PvP S4 - Wyrmhide",      "Head",     "Brutal Gladiator's Wyrmhide Helm",         35021),
-    S("PvP S4 - Wyrmhide",      "Shoulder", "Brutal Gladiator's Wyrmhide Spaulders",    35023),
-    S("PvP S4 - Wyrmhide",      "Chest",    "Brutal Gladiator's Wyrmhide Tunic",        35024),
-    S("PvP S4 - Wyrmhide",      "Hands",    "Brutal Gladiator's Wyrmhide Gloves",       35020),
-    S("PvP S4 - Wyrmhide",      "Legs",     "Brutal Gladiator's Wyrmhide Legguards",    35022),
+    -- PvP S4: Brutal Gladiator's Wildhide [set 2000585]
+    S("PvP S4 - Wildhide",      "Head",     "Brutal Gladiator's Wildhide Helm",         35114),
+    S("PvP S4 - Wildhide",      "Shoulder", "Brutal Gladiator's Wildhide Spaulders",    35115),
+    S("PvP S4 - Wildhide",      "Chest",    "Brutal Gladiator's Wildhide Tunic",        35112),
+    S("PvP S4 - Wildhide",      "Hands",    "Brutal Gladiator's Wildhide Gloves",       35111),
+    S("PvP S4 - Wildhide",      "Legs",     "Brutal Gladiator's Wildhide Legguards",    35113),
 }
 
 -- ============================================================
@@ -655,48 +656,48 @@ WW.DATA["SHAMAN"] = {
     S("T6 - Skyshatter",        "Wrist",    "Skyshatter Bracers",            34438),
     S("T6 - Skyshatter",        "Feet",     "Skyshatter Boots",              34565),
 
-    -- PvP S1: Gladiator's Linked Armor — verified via wowhead scan
-    S("PvP S1 - Linked",        "Head",     "Gladiator's Linked Helm",           28116),
-    S("PvP S1 - Linked",        "Shoulder", "Gladiator's Linked Spaulders",      28118),
-    S("PvP S1 - Linked",        "Chest",    "Gladiator's Linked Armor",          28119),
-    S("PvP S1 - Linked",        "Hands",    "Gladiator's Linked Gauntlets",      28115),
-    S("PvP S1 - Linked",        "Legs",     "Gladiator's Linked Leggings",       28117),
+    -- PvP S1: Gladiator's Earthshaker [set 578] — AtlasLoot ItemSet.lua
+    S("PvP S1 - Earthshaker",   "Head",     "Gladiator's Earthshaker Helm",      25999),
+    S("PvP S1 - Earthshaker",   "Shoulder", "Gladiator's Earthshaker Spaulders", 25997),
+    S("PvP S1 - Earthshaker",   "Chest",    "Gladiator's Earthshaker Hauberk",   25998),
+    S("PvP S1 - Earthshaker",   "Hands",    "Gladiator's Earthshaker Gauntlets", 26000),
+    S("PvP S1 - Earthshaker",   "Legs",     "Gladiator's Earthshaker Kilt",      26001),
 
-    -- PvP S2: Merciless Gladiator's Linked Armor
-    S("PvP S2 - Linked",        "Head",     "Merciless Gladiator's Linked Helm",      32037),
-    S("PvP S2 - Linked",        "Shoulder", "Merciless Gladiator's Linked Spaulders", 32039),
-    S("PvP S2 - Linked",        "Chest",    "Merciless Gladiator's Linked Armor",     32040),
-    S("PvP S2 - Linked",        "Hands",    "Merciless Gladiator's Linked Gauntlets", 32036),
-    S("PvP S2 - Linked",        "Legs",     "Merciless Gladiator's Linked Leggings",  32038),
+    -- PvP S2: Merciless Gladiator's Earthshaker [set 703]
+    S("PvP S2 - Earthshaker",   "Head",     "Merciless Gladiator's Earthshaker Helm",      32008),
+    S("PvP S2 - Earthshaker",   "Shoulder", "Merciless Gladiator's Earthshaker Spaulders", 32004),
+    S("PvP S2 - Earthshaker",   "Chest",    "Merciless Gladiator's Earthshaker Hauberk",   32006),
+    S("PvP S2 - Earthshaker",   "Hands",    "Merciless Gladiator's Earthshaker Gauntlets", 32005),
+    S("PvP S2 - Earthshaker",   "Legs",     "Merciless Gladiator's Earthshaker Kilt",      32007),
 
-    -- PvP S3: Vengeful Gladiator's Linked Armor
-    S("PvP S3 - Linked",        "Head",     "Vengeful Gladiator's Linked Helm",       33759),
-    S("PvP S3 - Linked",        "Shoulder", "Vengeful Gladiator's Linked Spaulders",  33761),
-    S("PvP S3 - Linked",        "Chest",    "Vengeful Gladiator's Linked Armor",      33762),
-    S("PvP S3 - Linked",        "Hands",    "Vengeful Gladiator's Linked Gauntlets",  33758),
-    S("PvP S3 - Linked",        "Legs",     "Vengeful Gladiator's Linked Leggings",   33760),
+    -- PvP S3: Vengeful Gladiator's Earthshaker [set 732]
+    S("PvP S3 - Earthshaker",   "Head",     "Vengeful Gladiator's Earthshaker Helm",       33710),
+    S("PvP S3 - Earthshaker",   "Shoulder", "Vengeful Gladiator's Earthshaker Spaulders",  33706),
+    S("PvP S3 - Earthshaker",   "Chest",    "Vengeful Gladiator's Earthshaker Hauberk",    33708),
+    S("PvP S3 - Earthshaker",   "Hands",    "Vengeful Gladiator's Earthshaker Gauntlets",  33707),
+    S("PvP S3 - Earthshaker",   "Legs",     "Vengeful Gladiator's Earthshaker Kilt",       33709),
 
-    -- PvP S4: Brutal Gladiator's Linked Armor
-    S("PvP S4 - Linked",        "Head",     "Brutal Gladiator's Linked Helm",         35044),
-    S("PvP S4 - Linked",        "Shoulder", "Brutal Gladiator's Linked Spaulders",    35046),
-    S("PvP S4 - Linked",        "Chest",    "Brutal Gladiator's Linked Armor",        35047),
-    S("PvP S4 - Linked",        "Hands",    "Brutal Gladiator's Linked Gauntlets",    35043),
-    S("PvP S4 - Linked",        "Legs",     "Brutal Gladiator's Linked Leggings",     35045),
+    -- PvP S4: Brutal Gladiator's Earthshaker [set 2000578]
+    S("PvP S4 - Earthshaker",   "Head",     "Brutal Gladiator's Earthshaker Helm",         35046),
+    S("PvP S4 - Earthshaker",   "Shoulder", "Brutal Gladiator's Earthshaker Spaulders",    35042),
+    S("PvP S4 - Earthshaker",   "Chest",    "Brutal Gladiator's Earthshaker Hauberk",      35044),
+    S("PvP S4 - Earthshaker",   "Hands",    "Brutal Gladiator's Earthshaker Gauntlets",    35043),
+    S("PvP S4 - Earthshaker",   "Legs",     "Brutal Gladiator's Earthshaker Kilt",         35045),
 }
 
 -- ============================================================
 -- WARLOCK
 -- ============================================================
 WW.DATA["WARLOCK"] = {
-    -- Pre-Raid: Dreadmist Raiment (dungeon blues)
-    S("Pre-Raid - Dreadmist",   "Head",     "Dreadmist Mask",                10795),
-    S("Pre-Raid - Dreadmist",   "Shoulder", "Dreadmist Mantle",              10800),
-    S("Pre-Raid - Dreadmist",   "Chest",    "Dreadmist Robe",                10797),
-    S("Pre-Raid - Dreadmist",   "Hands",    "Dreadmist Gloves",              10806),
-    S("Pre-Raid - Dreadmist",   "Legs",     "Dreadmist Leggings",            10802),
-    S("Pre-Raid - Dreadmist",   "Feet",     "Dreadmist Sandals",             10801),
-    S("Pre-Raid - Dreadmist",   "Waist",    "Dreadmist Belt",                10798),
-    S("Pre-Raid - Dreadmist",   "Wrist",    "Dreadmist Bracers",             10799),
+    -- Pre-Raid: Dreadmist Raiment (dungeon blues) — IDs from AtlasLoot data.lua
+    S("Pre-Raid - Dreadmist",   "Head",     "Dreadmist Mask",                16698),
+    S("Pre-Raid - Dreadmist",   "Shoulder", "Dreadmist Mantle",              16701),
+    S("Pre-Raid - Dreadmist",   "Chest",    "Dreadmist Robe",                16700),
+    S("Pre-Raid - Dreadmist",   "Hands",    "Dreadmist Wraps",               16705),
+    S("Pre-Raid - Dreadmist",   "Legs",     "Dreadmist Leggings",            16699),
+    S("Pre-Raid - Dreadmist",   "Feet",     "Dreadmist Sandals",             16704),
+    S("Pre-Raid - Dreadmist",   "Waist",    "Dreadmist Belt",                16702),
+    S("Pre-Raid - Dreadmist",   "Wrist",    "Dreadmist Bracers",             16703),
 
     -- Classic T1: Felheart Raiment (MC) — verified
     S("T1 - Felheart",          "Head",     "Felheart Horns",                16808),
@@ -752,48 +753,48 @@ WW.DATA["WARLOCK"] = {
     S("T6 - Malefic",           "Wrist",    "Bracers of the Malefic",        34436),
     S("T6 - Malefic",           "Feet",     "Boots of the Malefic",          34564),
 
-    -- PvP S1: Gladiator's Dreadgear
-    S("PvP S1 - Dreadgear",     "Head",     "Gladiator's Dreadgear Hood",        28201),
-    S("PvP S1 - Dreadgear",     "Shoulder", "Gladiator's Dreadgear Mantle",      28203),
-    S("PvP S1 - Dreadgear",     "Chest",    "Gladiator's Dreadgear Robes",       28204),
-    S("PvP S1 - Dreadgear",     "Hands",    "Gladiator's Dreadgear Gloves",      28200),
-    S("PvP S1 - Dreadgear",     "Legs",     "Gladiator's Dreadgear Leggings",    28202),
+    -- PvP S1: Gladiator's Dreadgear [set 568] — AtlasLoot ItemSet.lua
+    S("PvP S1 - Dreadgear",     "Head",     "Gladiator's Dreadgear Hood",        24554),
+    S("PvP S1 - Dreadgear",     "Shoulder", "Gladiator's Dreadgear Mantle",      24552),
+    S("PvP S1 - Dreadgear",     "Chest",    "Gladiator's Dreadgear Robes",       24553),
+    S("PvP S1 - Dreadgear",     "Hands",    "Gladiator's Dreadgear Gloves",      24556),
+    S("PvP S1 - Dreadgear",     "Legs",     "Gladiator's Dreadgear Leggings",    24555),
 
-    -- PvP S2: Merciless Gladiator's Dreadgear
-    S("PvP S2 - Dreadgear",     "Head",     "Merciless Gladiator's Dreadgear Hood",     32032),
-    S("PvP S2 - Dreadgear",     "Shoulder", "Merciless Gladiator's Dreadgear Mantle",   32034),
-    S("PvP S2 - Dreadgear",     "Chest",    "Merciless Gladiator's Dreadgear Robes",    32035),
-    S("PvP S2 - Dreadgear",     "Hands",    "Merciless Gladiator's Dreadgear Gloves",   32031),
-    S("PvP S2 - Dreadgear",     "Legs",     "Merciless Gladiator's Dreadgear Leggings", 32033),
+    -- PvP S2: Merciless Gladiator's Dreadgear [set 702]
+    S("PvP S2 - Dreadgear",     "Head",     "Merciless Gladiator's Dreadgear Hood",     31976),
+    S("PvP S2 - Dreadgear",     "Shoulder", "Merciless Gladiator's Dreadgear Mantle",   31977),
+    S("PvP S2 - Dreadgear",     "Chest",    "Merciless Gladiator's Dreadgear Robes",    31974),
+    S("PvP S2 - Dreadgear",     "Hands",    "Merciless Gladiator's Dreadgear Gloves",   31973),
+    S("PvP S2 - Dreadgear",     "Legs",     "Merciless Gladiator's Dreadgear Leggings", 31975),
 
-    -- PvP S3: Vengeful Gladiator's Dreadgear
-    S("PvP S3 - Dreadgear",     "Head",     "Vengeful Gladiator's Dreadgear Hood",      33764),
-    S("PvP S3 - Dreadgear",     "Shoulder", "Vengeful Gladiator's Dreadgear Mantle",    33766),
-    S("PvP S3 - Dreadgear",     "Chest",    "Vengeful Gladiator's Dreadgear Robes",     33767),
-    S("PvP S3 - Dreadgear",     "Hands",    "Vengeful Gladiator's Dreadgear Gloves",    33763),
-    S("PvP S3 - Dreadgear",     "Legs",     "Vengeful Gladiator's Dreadgear Leggings",  33765),
+    -- PvP S3: Vengeful Gladiator's Dreadgear [set 734]
+    S("PvP S3 - Dreadgear",     "Head",     "Vengeful Gladiator's Dreadgear Hood",      33679),
+    S("PvP S3 - Dreadgear",     "Shoulder", "Vengeful Gladiator's Dreadgear Mantle",    33680),
+    S("PvP S3 - Dreadgear",     "Chest",    "Vengeful Gladiator's Dreadgear Robes",     33677),
+    S("PvP S3 - Dreadgear",     "Hands",    "Vengeful Gladiator's Dreadgear Gloves",    33676),
+    S("PvP S3 - Dreadgear",     "Legs",     "Vengeful Gladiator's Dreadgear Leggings",  33678),
 
-    -- PvP S4: Brutal Gladiator's Dreadgear
-    S("PvP S4 - Dreadgear",     "Head",     "Brutal Gladiator's Dreadgear Hood",        35049),
-    S("PvP S4 - Dreadgear",     "Shoulder", "Brutal Gladiator's Dreadgear Mantle",      35051),
-    S("PvP S4 - Dreadgear",     "Chest",    "Brutal Gladiator's Dreadgear Robes",       35052),
-    S("PvP S4 - Dreadgear",     "Hands",    "Brutal Gladiator's Dreadgear Gloves",      35048),
-    S("PvP S4 - Dreadgear",     "Legs",     "Brutal Gladiator's Dreadgear Leggings",    35050),
+    -- PvP S4: Brutal Gladiator's Dreadgear [set 2000568]
+    S("PvP S4 - Dreadgear",     "Head",     "Brutal Gladiator's Dreadgear Hood",        35006),
+    S("PvP S4 - Dreadgear",     "Shoulder", "Brutal Gladiator's Dreadgear Mantle",      35007),
+    S("PvP S4 - Dreadgear",     "Chest",    "Brutal Gladiator's Dreadgear Robes",       35004),
+    S("PvP S4 - Dreadgear",     "Hands",    "Brutal Gladiator's Dreadgear Gloves",      35003),
+    S("PvP S4 - Dreadgear",     "Legs",     "Brutal Gladiator's Dreadgear Leggings",    35005),
 }
 
 -- ============================================================
 -- WARRIOR
 -- ============================================================
 WW.DATA["WARRIOR"] = {
-    -- Pre-Raid: Valor Armor (dungeon blues)
-    S("Pre-Raid - Valor",       "Head",     "Helm of Valor",                 10760),
-    S("Pre-Raid - Valor",       "Shoulder", "Spaulders of Valor",            10756),
-    S("Pre-Raid - Valor",       "Chest",    "Breastplate of Valor",          10758),
-    S("Pre-Raid - Valor",       "Hands",    "Gauntlets of Valor",            10765),
-    S("Pre-Raid - Valor",       "Legs",     "Legplates of Valor",            10764),
-    S("Pre-Raid - Valor",       "Feet",     "Boots of Valor",                10757),
-    S("Pre-Raid - Valor",       "Waist",    "Girdle of Valor",               10761),
-    S("Pre-Raid - Valor",       "Wrist",    "Bracers of Valor",              10762),
+    -- Pre-Raid: Valor Armor (dungeon blues) — IDs from AtlasLoot data.lua
+    S("Pre-Raid - Valor",       "Head",     "Helm of Valor",                 16731),
+    S("Pre-Raid - Valor",       "Shoulder", "Spaulders of Valor",            16733),
+    S("Pre-Raid - Valor",       "Chest",    "Breastplate of Valor",          16730),
+    S("Pre-Raid - Valor",       "Hands",    "Gauntlets of Valor",            16737),
+    S("Pre-Raid - Valor",       "Legs",     "Legplates of Valor",            16732),
+    S("Pre-Raid - Valor",       "Feet",     "Boots of Valor",                16734),
+    S("Pre-Raid - Valor",       "Waist",    "Belt of Valor",                 16736),
+    S("Pre-Raid - Valor",       "Wrist",    "Bracers of Valor",              16735),
 
     -- Classic T1: Battlegear of Might (MC) — verified
     S("T1 - Might",             "Head",     "Helm of Might",                 16866),
@@ -849,33 +850,33 @@ WW.DATA["WARRIOR"] = {
     S("T6 - Onslaught",         "Wrist",    "Onslaught Bracers",             34441),
     S("T6 - Onslaught",         "Feet",     "Onslaught Treads",              34569),
 
-    -- PvP S1: Gladiator's Plate Armor
-    S("PvP S1 - Plate",         "Head",     "Gladiator's Plate Helm",            28097),
-    S("PvP S1 - Plate",         "Shoulder", "Gladiator's Plate Shoulders",       28099),
-    S("PvP S1 - Plate",         "Chest",    "Gladiator's Plate Chestpiece",      28100),
-    S("PvP S1 - Plate",         "Hands",    "Gladiator's Plate Gauntlets",       28096),
-    S("PvP S1 - Plate",         "Legs",     "Gladiator's Plate Legguards",       28098),
+    -- PvP S1: Gladiator's Battlegear [set 567] — AtlasLoot ItemSet.lua
+    S("PvP S1 - Battlegear",    "Head",     "Gladiator's Battlegear Helm",       24546),
+    S("PvP S1 - Battlegear",    "Shoulder", "Gladiator's Battlegear Spaulders",  24544),
+    S("PvP S1 - Battlegear",    "Chest",    "Gladiator's Battlegear Breastplate",24545),
+    S("PvP S1 - Battlegear",    "Hands",    "Gladiator's Battlegear Gauntlets",  24549),
+    S("PvP S1 - Battlegear",    "Legs",     "Gladiator's Battlegear Legguards",  24547),
 
-    -- PvP S2: Merciless Gladiator's Plate Armor
-    S("PvP S2 - Plate",         "Head",     "Merciless Gladiator's Plate Helm",      32042),
-    S("PvP S2 - Plate",         "Shoulder", "Merciless Gladiator's Plate Shoulders", 32044),
-    S("PvP S2 - Plate",         "Chest",    "Merciless Gladiator's Plate Chestpiece",32045),
-    S("PvP S2 - Plate",         "Hands",    "Merciless Gladiator's Plate Gauntlets", 32041),
-    S("PvP S2 - Plate",         "Legs",     "Merciless Gladiator's Plate Legguards", 32043),
+    -- PvP S2: Merciless Gladiator's Battlegear [set 701]
+    S("PvP S2 - Battlegear",    "Head",     "Merciless Gladiator's Battlegear Helm",       30490),
+    S("PvP S2 - Battlegear",    "Shoulder", "Merciless Gladiator's Battlegear Spaulders",  30486),
+    S("PvP S2 - Battlegear",    "Chest",    "Merciless Gladiator's Battlegear Breastplate",30488),
+    S("PvP S2 - Battlegear",    "Hands",    "Merciless Gladiator's Battlegear Gauntlets",  30487),
+    S("PvP S2 - Battlegear",    "Legs",     "Merciless Gladiator's Battlegear Legguards",  30489),
 
-    -- PvP S3: Vengeful Gladiator's Plate Armor
-    S("PvP S3 - Plate",         "Head",     "Vengeful Gladiator's Plate Helm",       33769),
-    S("PvP S3 - Plate",         "Shoulder", "Vengeful Gladiator's Plate Shoulders",  33771),
-    S("PvP S3 - Plate",         "Chest",    "Vengeful Gladiator's Plate Chestpiece", 33772),
-    S("PvP S3 - Plate",         "Hands",    "Vengeful Gladiator's Plate Gauntlets",  33768),
-    S("PvP S3 - Plate",         "Legs",     "Vengeful Gladiator's Plate Legguards",  33770),
+    -- PvP S3: Vengeful Gladiator's Battlegear [set 736]
+    S("PvP S3 - Battlegear",    "Head",     "Vengeful Gladiator's Battlegear Helm",        33732),
+    S("PvP S3 - Battlegear",    "Shoulder", "Vengeful Gladiator's Battlegear Spaulders",   33728),
+    S("PvP S3 - Battlegear",    "Chest",    "Vengeful Gladiator's Battlegear Breastplate", 33730),
+    S("PvP S3 - Battlegear",    "Hands",    "Vengeful Gladiator's Battlegear Gauntlets",   33729),
+    S("PvP S3 - Battlegear",    "Legs",     "Vengeful Gladiator's Battlegear Legguards",   33731),
 
-    -- PvP S4: Brutal Gladiator's Plate Armor
-    S("PvP S4 - Plate",         "Head",     "Brutal Gladiator's Plate Helm",         35054),
-    S("PvP S4 - Plate",         "Shoulder", "Brutal Gladiator's Plate Shoulders",    35056),
-    S("PvP S4 - Plate",         "Chest",    "Brutal Gladiator's Plate Chestpiece",   35057),
-    S("PvP S4 - Plate",         "Hands",    "Brutal Gladiator's Plate Gauntlets",    35053),
-    S("PvP S4 - Plate",         "Legs",     "Brutal Gladiator's Plate Legguards",    35055),
+    -- PvP S4: Brutal Gladiator's Battlegear [set 2000567]
+    S("PvP S4 - Battlegear",    "Head",     "Brutal Gladiator's Battlegear Helm",          35070),
+    S("PvP S4 - Battlegear",    "Shoulder", "Brutal Gladiator's Battlegear Spaulders",     35066),
+    S("PvP S4 - Battlegear",    "Chest",    "Brutal Gladiator's Battlegear Breastplate",   35068),
+    S("PvP S4 - Battlegear",    "Hands",    "Brutal Gladiator's Battlegear Gauntlets",     35067),
+    S("PvP S4 - Battlegear",    "Legs",     "Brutal Gladiator's Battlegear Legguards",     35069),
 }
 
 -- ============================================================
