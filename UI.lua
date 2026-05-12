@@ -960,8 +960,8 @@ end
 -- ============================================================
 -- Boot on LOGIN
 -- ============================================================
+-- Always start hidden regardless of saved state. The user must
+-- manually open Wardrobe each session via /wwd or the minimap icon.
 WW:On("LOGIN", function()
-    if not WW.db.ui.hidden then
-        UI:Show()
-    end
+    WW.db.ui.hidden = true
 end)
