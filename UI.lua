@@ -82,6 +82,22 @@ function UI:AddTitleText(parent)
 end
 
 -- ============================================================
+-- BIS Tracker spec map (title-case class → ordered spec list)
+-- Matches WTBT_Data keys exactly.
+-- ============================================================
+local CLASS_SPECS = {
+    Druid   = { "Balance", "Feral", "Restoration" },
+    Hunter  = { "Beast Mastery", "Marksmanship", "Survival" },
+    Mage    = { "Arcane", "Fire", "Frost" },
+    Paladin = { "Holy", "Protection", "Retribution" },
+    Priest  = { "Holy", "Shadow" },
+    Rogue   = { "Assassination", "Combat" },
+    Shaman  = { "Elemental", "Enhancement", "Restoration" },
+    Warlock = { "Affliction", "Demonology", "Destruction" },
+    Warrior = { "Arms", "Fury", "Protection" },
+}
+
+-- ============================================================
 -- Panel dimensions
 -- ============================================================
 local MIN_W    = 560
@@ -90,9 +106,6 @@ local HEADER_H = 26
 local SIDE_W   = 180    -- class + set list column
 local ITEM_W   = 160    -- item list column
 local MODEL_MIN= 180    -- minimum model viewer width
-
--- Column layout (SIDE_W | ITEM_W | MODEL fill)
--- All three columns share the full height minus header + footer.
 
 -- ============================================================
 -- Scroll list helper: creates a clip frame + scroll content
@@ -119,7 +132,8 @@ local function MakeScrollList(parent, w, h, rowH)
 
     clip:EnableMouseWheel(true)
     clip:SetScript("OnMouseWheel", function(self, delta)
-        setScroll(scrollY - delta * rowH * 3)
+        -- delta +1 = wheel up = scroll toward top = decrease scrollY
+        setScroll(scrollY - delta * rowH)
     end)
 
     content.setScroll  = setScroll
@@ -182,7 +196,7 @@ local function buildPanel()
     brk(header, "TOPLEFT")
     brk(header, "TOPRIGHT")
     brk(panel,  "BOTTOMLEFT")
-    brk(panel,  "BOTTOMRIGHT")
+    -- BOTTOMRIGHT bracket drawn after grip exists so it renders above the grip texture
 
     -- Close button
     local closeBtn = CreateFrame("Button", nil, header)
@@ -265,11 +279,71 @@ local function buildPanel()
         end
     end
 
-    local setList  -- forward ref
+    local selectedSpec = "Feral"  -- default; updated when spec clicked
+    local specRows     = {}
+    local setList      -- forward ref
+
+    local function highlightSpec(spec)
+        for _, r in ipairs(specRows) do
+            if r.spec == spec then
+                r.label:SetTextColor(UI.C_GREEN[1], UI.C_GREEN[2], UI.C_GREEN[3], 1)
+            else
+                r.label:SetTextColor(UI.C_TEXT_NORMAL[1], UI.C_TEXT_NORMAL[2], UI.C_TEXT_NORMAL[3], 1)
+            end
+        end
+    end
+
+    -- specPickerFrame: lives inside bodyFrame, positioned dynamically
+    local specPickerFrame = CreateFrame("Frame", nil, bodyFrame)
+    specPickerFrame:SetWidth(SIDE_W - 4)
+
+    local function rebuildSpecPicker(class)
+        for _, r in ipairs(specRows) do r:Hide() end
+        wipe(specRows)
+        local titleClass = class:sub(1,1):upper() .. class:sub(2):lower()
+        local specs = CLASS_SPECS[titleClass]
+        if not specs or #specs == 0 then
+            specPickerFrame:SetHeight(0)
+            return
+        end
+        -- Default spec to first if current selectedSpec not valid for this class
+        local valid = false
+        for _, s in ipairs(specs) do if s == selectedSpec then valid = true break end end
+        if not valid then selectedSpec = specs[1] end
+
+        local rowH = 16
+        for i, spec in ipairs(specs) do
+            local r = CreateFrame("Button", nil, specPickerFrame)
+            r:SetSize(SIDE_W - 4, rowH)
+            r:SetPoint("TOPLEFT", specPickerFrame, "TOPLEFT", 0, -(i - 1) * rowH)
+            r.spec = spec
+            local lbl = UI:NewText(r, 10, UI.C_TEXT_NORMAL)
+            lbl:SetPoint("LEFT", r, "LEFT", 6, 0)
+            lbl:SetText(spec)
+            r.label = lbl
+            r:SetScript("OnClick", function()
+                selectedSpec = spec
+                highlightSpec(spec)
+            end)
+            r:SetScript("OnEnter", function() lbl:SetTextColor(1, 1, 1, 1) end)
+            r:SetScript("OnLeave", function()
+                if selectedSpec == spec then
+                    lbl:SetTextColor(UI.C_GREEN[1], UI.C_GREEN[2], UI.C_GREEN[3], 1)
+                else
+                    lbl:SetTextColor(UI.C_TEXT_NORMAL[1], UI.C_TEXT_NORMAL[2], UI.C_TEXT_NORMAL[3], 1)
+                end
+            end)
+            table.insert(specRows, r)
+        end
+        specPickerFrame:SetHeight(#specs * rowH)
+        highlightSpec(selectedSpec)
+    end
+
     local function refreshSets(class)
         selectedClass = class
         db.lastClass  = class
         highlightClass(class)
+        rebuildSpecPicker(class)
         if setList then setList.populate(class) end
     end
 
@@ -301,8 +375,22 @@ local function buildPanel()
         classBtns[className] = b
     end
 
-    -- Divider between class list and set list
-    local setDivY = -(#WW.CLASS_ORDER * classBtnH + 20)
+    -- Spec picker: sits below class buttons
+    local specLabelY = -(#WW.CLASS_ORDER * classBtnH + 16)
+    local specLabel = UI:NewText(bodyFrame, 10, UI.C_TEXT_DIM)
+    specLabel:SetPoint("TOPLEFT", bodyFrame, "TOPLEFT", 8, specLabelY)
+    specLabel:SetText("SPEC")
+
+    local specDivLine = UI:NewTexture(bodyFrame, "BORDER", UI.C_BORDER)
+    specDivLine:SetHeight(1)
+    specDivLine:SetPoint("TOPLEFT",  bodyFrame, "TOPLEFT",  0, specLabelY)
+    specDivLine:SetPoint("TOPRIGHT", div1,      "TOPLEFT",  0, specLabelY)
+
+    specPickerFrame:SetPoint("TOPLEFT", bodyFrame, "TOPLEFT", 2, specLabelY - 14)
+
+    -- Divider between spec list and set list (fixed offset: max 3 specs × 16px + padding)
+    local SPEC_BLOCK_H = 3 * 16 + 8   -- enough for 3 specs
+    local setDivY = specLabelY - 14 - SPEC_BLOCK_H
     local setDivLine = UI:NewTexture(bodyFrame, "BORDER", UI.C_BORDER)
     setDivLine:SetHeight(1)
     setDivLine:SetPoint("TOPLEFT",  bodyFrame, "TOPLEFT",  0, setDivY)
@@ -313,9 +401,9 @@ local function buildPanel()
     setLabel:SetPoint("TOPLEFT", bodyFrame, "TOPLEFT", 8, setDivY - 6)
     setLabel:SetText("SET")
 
-    local setListTopY  = setDivY - 18
-    local setListH     = bodyH + setListTopY   -- remaining height
-    local setContent   = MakeScrollList(bodyFrame, SIDE_W - 4, math.max(80, -setListTopY - 4), 18)
+    local setListTopY = setDivY - 18
+    local setListH    = math.max(80, bodyH + setListTopY - 4)  -- remaining body height below set label
+    local setContent  = MakeScrollList(bodyFrame, SIDE_W - 4, setListH, 18)
     setContent.clip:SetPoint("TOPLEFT", bodyFrame, "TOPLEFT", 2, setListTopY)
 
     local selectedSet   = nil
@@ -393,6 +481,8 @@ local function buildPanel()
         paLbl:SetTextColor(UI.C_TEXT_NORMAL[1], UI.C_TEXT_NORMAL[2], UI.C_TEXT_NORMAL[3], 1)
     end)
 
+    local model = nil  -- assigned after DressUpModel frame is created below
+
     -- "From BIS" button — imports BIS Tracker custom list or BIS phase
     local bisBtn = CreateFrame("Button", nil, bodyFrame)
     bisBtn:SetSize(BTN_W, BTN_H)
@@ -433,7 +523,6 @@ local function buildPanel()
     }
 
     local function previewBISItems(slotTable)
-        -- slotTable: { slotKey = { itemId = N } } or { slotKey = { items = { {itemId} } } }
         if not model then return end
         model:Undress()
         for slotKey, entry in pairs(slotTable) do
@@ -442,12 +531,12 @@ local function buildPanel()
                 if entry.itemId then
                     itemId = entry.itemId
                 elseif type(entry[1]) == "table" and entry[1].itemId then
-                    itemId = entry[1].itemId  -- BIS list: first (best) item
+                    itemId = entry[1].itemId
                 end
             end
             if itemId then
-                local slotId = BIS_SLOT_MAP[slotKey]
-                if slotId then model:SetItem(slotId, itemId) end
+                local link = ("|Hitem:%d:0:0:0:0:0:0:0|h[item:%d]|h"):format(itemId, itemId)
+                model:TryOn(link)
             end
         end
     end
@@ -536,13 +625,8 @@ local function buildPanel()
             bisPopup:Hide()
             return
         end
-        -- Derive class/spec from BIS Tracker state if loaded, else current wardrobe class
-        -- BIS Tracker stores class in title-case ("Priest"), Wardrobe uses uppercase ("PRIEST")
-        local cls  = (WTBT and WTBT.state and WTBT.state.class)
-                     or (selectedClass and selectedClass:sub(1,1):upper() .. selectedClass:sub(2):lower())
-                     or "Priest"
-        local spec = (WTBT and WTBT.state and WTBT.state.spec) or "Holy"
-        buildBISPopup(cls, spec)
+        local cls = selectedClass:sub(1,1):upper() .. selectedClass:sub(2):lower()
+        buildBISPopup(cls, selectedSpec)
         bisPopup:ClearAllPoints()
         bisPopup:SetPoint("BOTTOMLEFT", bisBtn, "TOPLEFT", 0, 2)
         bisPopup:Show()
@@ -563,13 +647,13 @@ local function buildPanel()
     -- Put the popup above the catcher
     bisPopup:SetFrameLevel(bisCatcher:GetFrameLevel() + 1)
 
+    local ITEM_ROW_H        = 38   -- icon row height + gap
     local ITEM_LIST_BOT_PAD = 30  -- space for button row
     local itemListH = bodyH - 20 - ITEM_LIST_BOT_PAD
-    local itemScrollContent = MakeScrollList(bodyFrame, ITEM_W - 4, itemListH, 20)
+    local itemScrollContent = MakeScrollList(bodyFrame, ITEM_W - 4, itemListH, ITEM_ROW_H)
     itemScrollContent.clip:SetPoint("TOPLEFT", bodyFrame, "TOPLEFT", SIDE_W + 2, -18)
 
     local itemRows = {}
-    local model    = nil   -- forward ref
 
     -- Inventory slot numbers for DressUpModel:SetItem(slotId, itemId)
     -- SetItem bypasses class/equip restrictions — visual only.
@@ -582,96 +666,128 @@ local function buildPanel()
 
     local function tryOnItem(item)
         if not model then return end
-        local slotId = SLOT_ID[item.slot]
-        if slotId then
-            model:SetItem(slotId, item.id)
-        else
-            -- fallback for unmapped slots
-            model:TryOn(item.link)
-        end
+        model:TryOn(item.link)
     end
 
     itemContent = {}
     itemContent.populate = function(class, setName)
         for _, row in ipairs(itemRows) do row:Hide() end
         wipe(itemRows)
-        itemScrollContent:resetScroll()
         local items = WW:GetSetItems(class, setName)
-        local contentH = #items * 22 + 4
-        itemScrollContent:SetHeight(math.max(80, contentH))
+        local ROW_H = ITEM_ROW_H - 2
+        local ICO_S = 32
+        itemScrollContent:SetHeight(math.max(80, #items * ITEM_ROW_H + 4))
+        itemScrollContent:resetScroll()
         for i, item in ipairs(items) do
             local row = CreateFrame("Button", nil, itemScrollContent)
-            row:SetSize(ITEM_W - 8, 20)
-            row:SetPoint("TOPLEFT", itemScrollContent, "TOPLEFT", 2, -(i - 1) * 22 - 2)
+            row:SetSize(ITEM_W - 8, ROW_H)
+            row:SetPoint("TOPLEFT", itemScrollContent, "TOPLEFT", 2, -(i - 1) * ITEM_ROW_H - 2)
+            row.previewing = false
 
-            -- Item name (full row width)
+            -- Hover bg (stored on row for external access)
+            local hoverBg = UI:NewTexture(row, "BACKGROUND", { 0.18, 0.13, 0.28, 0 })
+            hoverBg:SetAllPoints()
+            row.hoverBg = hoverBg
+
+            -- Item icon
+            local iconFrame = CreateFrame("Frame", nil, row)
+            iconFrame:SetSize(ICO_S, ICO_S)
+            iconFrame:SetPoint("LEFT", row, "LEFT", 2, 0)
+            local iconTex = iconFrame:CreateTexture(nil, "ARTWORK")
+            iconTex:SetAllPoints()
+            local function applyIcon()
+                local _, _, _, _, _, _, _, _, _, iconPath = GetItemInfo(item.id)
+                if iconPath then
+                    iconTex:SetTexture(iconPath)
+                else
+                    iconTex:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
+                end
+            end
+            applyIcon()
+            row.iconTex  = iconTex
+            row.itemId   = item.id
+            row.applyIcon = applyIcon
+            -- Dimmed border around icon
+            UI:AddBorder(iconFrame)
+
+            -- Item name label (single line, truncates)
             local nameLbl = UI:NewText(row, 10, UI.C_TEXT_NORMAL)
-            nameLbl:SetPoint("LEFT",  row, "LEFT",  4, 0)
-            nameLbl:SetPoint("RIGHT", row, "RIGHT", -4, 0)
+            nameLbl:SetPoint("TOPLEFT",  row, "TOPLEFT",  ICO_S + 6, -3)
+            nameLbl:SetPoint("TOPRIGHT", row, "TOPRIGHT", -4, -3)
             nameLbl:SetText(item.name)
             nameLbl:SetWordWrap(false)
             nameLbl:SetNonSpaceWrap(false)
 
+            -- Slot label below name
+            local slotLbl = UI:NewText(row, 9, UI.C_TEXT_DIM)
+            slotLbl:SetPoint("BOTTOMLEFT", row, "BOTTOMLEFT", ICO_S + 6, 4)
+            slotLbl:SetText(item.slot)
+
             row:SetScript("OnClick", function()
-                tryOnItem(item)
+                if row.previewing then
+                    -- toggle off: reload current gear then re-apply other active items
+                    modelFrame:SetUnit("player")
+                    row.previewing = false
+                    iconTex:SetDesaturated(false)
+                    UI:SetRGBA(hoverBg, { 0.18, 0.13, 0.28, 0 })
+                    for _, r in ipairs(itemRows) do
+                        if r ~= row and r.previewing then
+                            modelFrame:TryOn(r.item.link)
+                        end
+                    end
+                else
+                    tryOnItem(item)
+                    row.previewing = true
+                    iconTex:SetDesaturated(false)
+                    UI:SetRGBA(hoverBg, { 0.10, 0.30, 0.15, 0.4 })
+                end
             end)
             row:SetScript("OnEnter", function()
                 nameLbl:SetTextColor(UI.C_GREEN[1], UI.C_GREEN[2], UI.C_GREEN[3], 1)
+                UI:SetRGBA(hoverBg, { 0.18, 0.13, 0.28, row.previewing and 0.4 or 0.25 })
                 GameTooltip:SetOwner(row, "ANCHOR_RIGHT")
-                GameTooltip:AddLine(item.name, 1, 1, 1)
-                GameTooltip:AddLine(item.slot, UI.C_TEXT_DIM[1], UI.C_TEXT_DIM[2], UI.C_TEXT_DIM[3])
-                GameTooltip:AddLine("Click to preview", 0.5, 0.5, 0.5)
+                GameTooltip:SetHyperlink(item.link)
                 GameTooltip:Show()
             end)
             row:SetScript("OnLeave", function()
                 nameLbl:SetTextColor(UI.C_TEXT_NORMAL[1], UI.C_TEXT_NORMAL[2], UI.C_TEXT_NORMAL[3], 1)
+                UI:SetRGBA(hoverBg, { 0.18, 0.13, 0.28, row.previewing and 0.4 or 0 })
                 GameTooltip:Hide()
             end)
+            row.item = item
             table.insert(itemRows, row)
         end
 
         -- Wire preview-all to current set
         previewAllBtn:SetScript("OnClick", function()
+            if not model then return end
             local setItems = WW:GetSetItems(class, setName)
-            if model then
-                model:Undress()
-                for _, it in ipairs(setItems) do
-                    tryOnItem(it)
-                end
+            model:Undress()
+            for _, it in ipairs(setItems) do
+                model:TryOn(it.link)
+            end
+            for _, r in ipairs(itemRows) do
+                r.previewing = true
+                if r.hoverBg then UI:SetRGBA(r.hoverBg, { 0.10, 0.30, 0.15, 0.4 }) end
             end
         end)
     end
 
-    -- --------------------------------------------------------
-    -- Right column: DressUpModel (inline character preview)
-    -- --------------------------------------------------------
-    local modelFrame = CreateFrame("DressUpModel", "WicksWardrobeModel", bodyFrame)
-    model = modelFrame
-    modelFrame:SetPoint("TOPLEFT",     bodyFrame, "TOPLEFT",     SIDE_W + ITEM_W + 2, 0)
-    modelFrame:SetPoint("BOTTOMRIGHT", bodyFrame, "BOTTOMRIGHT", 0, 0)
-    modelFrame:EnableMouse(true)
-
-    -- Drag-to-rotate
-    local dragX     = nil
-    local facing    = 0   -- radians; 0 = default front-facing
-    modelFrame:SetScript("OnMouseDown", function(self, btn)
-        if btn == "LeftButton" then
-            dragX = select(1, GetCursorPosition())
+    -- Update icons when item data arrives from server
+    WW.eventFrame:HookScript("OnEvent", function(_, event, itemId)
+        if event ~= "GET_ITEM_INFO_RECEIVED" then return end
+        for _, r in ipairs(itemRows) do
+            if r.itemId == itemId and r.applyIcon then
+                r.applyIcon()
+            end
         end
     end)
-    modelFrame:SetScript("OnMouseUp", function(self, btn)
-        if btn == "LeftButton" then dragX = nil end
-    end)
-    modelFrame:SetScript("OnUpdate", function(self)
-        if not dragX then return end
-        local cx = select(1, GetCursorPosition())
-        local dx = cx - dragX
-        dragX = cx
-        facing = facing + dx * 0.01
-        self:SetFacing(facing)
-    end)
+    pcall(WW.eventFrame.RegisterEvent, WW.eventFrame, "GET_ITEM_INFO_RECEIVED")
 
-    -- Model controls strip along the bottom of the model pane
+    -- --------------------------------------------------------
+    -- Right column: inline DressUpModel character preview
+    -- --------------------------------------------------------
+    -- Controls strip along the bottom of the model pane (declared first — modelFrame uses modelCtrlH)
     local modelCtrlH = 22
     local ctrlStrip = CreateFrame("Frame", nil, bodyFrame)
     ctrlStrip:SetPoint("BOTTOMLEFT",  bodyFrame, "BOTTOMLEFT",  SIDE_W + ITEM_W + 2, 0)
@@ -680,73 +796,54 @@ local function buildPanel()
     local ctrlBg = UI:NewTexture(ctrlStrip, "BACKGROUND", UI.C_HEADER_BG)
     ctrlBg:SetAllPoints()
 
-    -- Undress button
-    local undressBtn = CreateFrame("Button", nil, ctrlStrip)
-    undressBtn:SetSize(60, 18)
-    undressBtn:SetPoint("LEFT", ctrlStrip, "LEFT", 4, 0)
-    local ubg = UI:NewTexture(undressBtn, "BACKGROUND", { 0.14, 0.09, 0.22, 1 })
-    ubg:SetAllPoints()
-    UI:AddBorder(undressBtn)
-    local uLbl = UI:NewText(undressBtn, 9, UI.C_TEXT_NORMAL)
-    uLbl:SetPoint("CENTER")
-    uLbl:SetText("Undress")
-    undressBtn:SetScript("OnClick", function() modelFrame:Undress() end)
-    undressBtn:SetScript("OnEnter", function() uLbl:SetTextColor(UI.C_GREEN[1], UI.C_GREEN[2], UI.C_GREEN[3], 1) end)
-    undressBtn:SetScript("OnLeave", function() uLbl:SetTextColor(UI.C_TEXT_NORMAL[1], UI.C_TEXT_NORMAL[2], UI.C_TEXT_NORMAL[3], 1) end)
+    local function makeCtrlBtn(parent, w, anchorPoint, anchorFrame, anchorTo, ox, label)
+        local btn = CreateFrame("Button", nil, parent)
+        btn:SetSize(w, 18)
+        btn:SetPoint(anchorPoint, anchorFrame, anchorTo, ox, 0)
+        local bg = UI:NewTexture(btn, "BACKGROUND", { 0.14, 0.09, 0.22, 1 })
+        bg:SetAllPoints()
+        UI:AddBorder(btn)
+        local lbl = UI:NewText(btn, 9, UI.C_TEXT_NORMAL)
+        lbl:SetPoint("CENTER")
+        lbl:SetText(label)
+        btn:SetScript("OnEnter", function() lbl:SetTextColor(UI.C_GREEN[1], UI.C_GREEN[2], UI.C_GREEN[3], 1) end)
+        btn:SetScript("OnLeave", function() lbl:SetTextColor(UI.C_TEXT_NORMAL[1], UI.C_TEXT_NORMAL[2], UI.C_TEXT_NORMAL[3], 1) end)
+        return btn
+    end
 
-    -- Reset-to-equipped button
-    local resetBtn = CreateFrame("Button", nil, ctrlStrip)
-    resetBtn:SetSize(72, 18)
-    resetBtn:SetPoint("LEFT", undressBtn, "RIGHT", 4, 0)
-    local rbg = UI:NewTexture(resetBtn, "BACKGROUND", { 0.14, 0.09, 0.22, 1 })
-    rbg:SetAllPoints()
-    UI:AddBorder(resetBtn)
-    local rLbl = UI:NewText(resetBtn, 9, UI.C_TEXT_NORMAL)
-    rLbl:SetPoint("CENTER")
-    rLbl:SetText("Reset Gear")
-    resetBtn:SetScript("OnClick", function() modelFrame:DressUp() end)
-    resetBtn:SetScript("OnEnter", function() rLbl:SetTextColor(UI.C_GREEN[1], UI.C_GREEN[2], UI.C_GREEN[3], 1) end)
-    resetBtn:SetScript("OnLeave", function() rLbl:SetTextColor(UI.C_TEXT_NORMAL[1], UI.C_TEXT_NORMAL[2], UI.C_TEXT_NORMAL[3], 1) end)
+    -- DressUpModel must be parented to a top-level frame (panel), not a sub-frame,
+    -- or the model renderer has no valid draw context and renders nothing.
+    local modelFrame = CreateFrame("DressUpModel", "WicksWardrobeModel", panel)
+    model = modelFrame
+    modelFrame:SetFrameLevel(panel:GetFrameLevel() + 1)
+    modelFrame:SetPoint("TOPLEFT",     panel, "TOPLEFT",     SIDE_W + ITEM_W + 2, -HEADER_H)
+    modelFrame:SetPoint("BOTTOMRIGHT", panel, "BOTTOMRIGHT", 0, modelCtrlH)
+    modelFrame:EnableMouse(true)
 
-    -- "Save Outfit" button (right side of ctrl strip)
-    local saveBtn = CreateFrame("Button", nil, ctrlStrip)
-    saveBtn:SetSize(72, 18)
-    saveBtn:SetPoint("RIGHT", ctrlStrip, "RIGHT", -4, 0)
-    local sbg = UI:NewTexture(saveBtn, "BACKGROUND", { 0.10, 0.19, 0.13, 1 })
-    sbg:SetAllPoints()
-    UI:AddBorder(saveBtn)
-    local sLbl = UI:NewText(saveBtn, 9, UI.C_TEXT_NORMAL)
-    sLbl:SetPoint("CENTER")
-    sLbl:SetText("Save Outfit")
-    saveBtn:SetScript("OnClick", function()
-        if not selectedClass or not selectedSet then return end
-        local items = WW:GetSetItems(selectedClass, selectedSet)
-        local outfitName = selectedClass .. " - " .. (selectedSet or "Custom")
-        -- Dedupe by name: overwrite if exists
-        local outfits = db.outfits
-        local found = false
-        for _, o in ipairs(outfits) do
-            if o.name == outfitName then
-                o.items = {}
-                for _, it in ipairs(items) do table.insert(o.items, it.link) end
-                found = true
-                break
-            end
-        end
-        if not found then
-            table.insert(outfits, { name = outfitName, items = (function()
-                local t = {}
-                for _, it in ipairs(items) do table.insert(t, it.link) end
-                return t
-            end)() })
-        end
-        print(("|cff4FC778Wick's Wardrobe|r: saved outfit '%s'"):format(outfitName))
+    -- Drag-to-rotate
+    local dragX  = nil
+    local facing = 0
+    modelFrame:SetScript("OnMouseDown", function(self, btn)
+        if btn == "LeftButton" then dragX = select(1, GetCursorPosition()) end
     end)
-    saveBtn:SetScript("OnEnter", function() sLbl:SetTextColor(UI.C_GREEN[1], UI.C_GREEN[2], UI.C_GREEN[3], 1) end)
-    saveBtn:SetScript("OnLeave", function() sLbl:SetTextColor(UI.C_TEXT_NORMAL[1], UI.C_TEXT_NORMAL[2], UI.C_TEXT_NORMAL[3], 1) end)
+    modelFrame:SetScript("OnMouseUp", function(self, btn)
+        if btn == "LeftButton" then dragX = nil end
+    end)
+    modelFrame:SetScript("OnUpdate", function(self)
+        if not dragX then return end
+        local cx = select(1, GetCursorPosition())
+        facing = facing + (cx - dragX) * 0.01
+        dragX  = cx
+        self:SetFacing(facing)
+    end)
 
-    -- Nudge the model frame up to leave room for the ctrl strip
-    modelFrame:SetPoint("BOTTOMRIGHT", bodyFrame, "BOTTOMRIGHT", 0, modelCtrlH)
+    local undressBtn = makeCtrlBtn(ctrlStrip, 60, "LEFT", ctrlStrip, "LEFT", 4, "Undress")
+    undressBtn:SetScript("OnClick", function() modelFrame:Undress() end)
+
+    local resetBtn = makeCtrlBtn(ctrlStrip, 72, "LEFT", undressBtn, "RIGHT", 4, "Current Gear")
+    resetBtn:SetScript("OnClick", function()
+        modelFrame:SetUnit("player")
+    end)
 
     -- --------------------------------------------------------
     -- Resize grip (BOTTOMRIGHT corner)
@@ -755,9 +852,11 @@ local function buildPanel()
     grip:SetSize(16, 16)
     grip:SetPoint("BOTTOMRIGHT", panel, "BOTTOMRIGHT", 0, 0)
     grip:EnableMouse(true)
-    local gripTex = grip:CreateTexture(nil, "OVERLAY")
+    local gripTex = grip:CreateTexture(nil, "BACKGROUND")
     gripTex:SetAllPoints()
     gripTex:SetColorTexture(UI.C_GREEN[1], UI.C_GREEN[2], UI.C_GREEN[3], 0.3)
+    -- Draw BOTTOMRIGHT bracket on the grip so it renders above the grip background
+    brk(grip, "BOTTOMRIGHT")
     grip:SetScript("OnMouseDown", function(self, btn)
         if btn == "LeftButton" then
             panel:StartSizing("BOTTOMRIGHT")
@@ -823,6 +922,7 @@ function UI:Show()
     end
     panel:Show()
     WW.db.ui.hidden = false
+    -- Load the player character into the model each time the panel opens
     if _G.WicksWardrobeModel then
         _G.WicksWardrobeModel:SetUnit("player")
     end
